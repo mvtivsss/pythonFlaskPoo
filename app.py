@@ -12,7 +12,7 @@ def inicio():
 
 @app.route('/regions')
 def getRegions():
-    
+
     return jsonify({'Regiones': regions})
 
 @app.route('/regions/<string:region_name>')
@@ -31,10 +31,9 @@ def addRegion():
     regions.append(newRegion)
     return jsonify({"message": "Region agregada !", "Regiones" : regions})
 
-
-@app.route('/regions/<string:region_name>', methods=["PUT"])
-def editRegion(region_name):
-    regionFound = [region for region in regions if regions['nombre'] == region_name]
+@app.route('/regions/<int:region_id>', methods=["PUT"])
+def editRegion(region_id):
+    regionFound = [region for region in regions if region['id'] == region_id]
     if (len(regionFound) > 0):
         regionFound[0]['id'] = request.json['id']
         regionFound[0]['nombre'] = request.json['nombre']
@@ -54,9 +53,6 @@ def deleteRegion(name):
         "Regiones": regionFound
     })
         
-
-
-
 
 @app.route('/clients')
 def getClients():
