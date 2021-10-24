@@ -2,7 +2,7 @@ from types import MethodType
 from flask import Flask, json, jsonify, request
 from regions import regions
 from clients import clientes
-# from Entities import regions
+from BD import configuracion
 
 app = Flask(__name__)
 
@@ -12,8 +12,8 @@ def inicio():
 
 @app.route('/regions')
 def getRegions():
-
-    return jsonify({'Regiones': regions})
+    regiones = [region for region in configuracion.row]
+    return jsonify({'Regiones': regiones})
 
 @app.route('/regions/<string:region_name>')
 def getRegion(region_name):
@@ -52,7 +52,6 @@ def deleteRegion(name):
         "message": "Region eliminada !",
         "Regiones": regionFound
     })
-        
 
 @app.route('/clients')
 def getClients():

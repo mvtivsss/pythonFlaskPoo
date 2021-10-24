@@ -1,8 +1,9 @@
+import json
+
 class regions:
     def __init__(self,id,nom):
         self.__id = id
         self.__nombre = nom
-
 
 #getters
     def getId(self):
