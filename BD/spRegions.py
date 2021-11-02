@@ -9,5 +9,6 @@ def getRegions():
                                encoding=cfg.encoding) as connection:
             with connection.cursor() as cursor:
                 cursor.callproc('spGetRegions')
+            print(cursor)
     except cx_Oracle.Error as error:
         print(error)

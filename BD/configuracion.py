@@ -3,9 +3,10 @@
 # C:\Python39 en mi caso.
 import cx_Oracle as conn
 
-lista = []
+
 
 def callProcedure(procedureName):
+    lista = []
     try:
         con = conn.connect('turismo/turismo@localhost:1521')
     except Exception as err:
@@ -23,9 +24,13 @@ def callProcedure(procedureName):
             print('Error ocasionado en el procedimiento almacenado.', err)
         finally:
             cursor.close()
+            refCursor.close()
     finally:
         con.close()
         return lista
+
+# def callProcedureINSERT():
+
 
 # Comando para corroborar la conexión y la version a base de datos.
 # con = conn.connect('turismo/turismo@localhost:1521')
