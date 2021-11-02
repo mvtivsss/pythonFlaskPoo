@@ -2,7 +2,8 @@ from types import MethodType
 from flask import Flask, json, jsonify, request
 from regions import regions
 from clients import clientes
-from BD import configuracion
+# from BD import configuracion
+from controller import region, servicioExtra
 
 app = Flask(__name__)
 
@@ -12,8 +13,20 @@ def inicio():
 
 @app.route('/regions')
 def getRegions():
-    regiones = [region for region in configuracion.row]
-    return jsonify({'Regiones': regiones})
+    regiones = [regionList for regionList in region.getRegiones()]
+    # listRegiones = json.dumps(regiones)
+    print(regiones)
+    if (len(regiones) > 0):
+        return jsonify({"Regiones":regiones})
+
+@app.route('/serviciosExtra')
+def getServExtra():
+    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
+    print(servicios)
+    if (len(servicios) > 0):
+        return jsonify(servicios)
+    else: 
+        return servicios
 
 @app.route('/regions/<string:region_name>')
 def getRegion(region_name):

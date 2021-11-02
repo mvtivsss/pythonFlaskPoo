@@ -3,22 +3,29 @@
 # C:\Python39 en mi caso.
 import cx_Oracle as conn
 
-try:
-    con = conn.connect('turismo/turismo@localhost:1521')
-except Exception as err:
-    print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
-else:
+lista = []
+
+def callProcedure(procedureName):
     try:
-        cur = con.cursor()
-        for row in cur.execute('SELECT * FROM REGION'):
-            print(row)
-        # cursor.callproc('sp_get_regions')
+        con = conn.connect('turismo/turismo@localhost:1521')
     except Exception as err:
-        print('Error ocasionado en el procedimiento almacenado.', err)
+        print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
+    else:
+        try:
+            cursor = con.cursor()
+            refCursor = con.cursor()
+            cursor.callproc(procedureName,[refCursor])
+            # myvar = cursor.var(conn.NUMBER)
+            for row in refCursor:           
+                # print(row)
+                lista.append(row)
+        except Exception as err:
+            print('Error ocasionado en el procedimiento almacenado.', err)
+        finally:
+            cursor.close()
     finally:
-        cur.close()
-finally:
-    con.close()
+        con.close()
+        return lista
 
 # Comando para corroborar la conexión y la version a base de datos.
 # con = conn.connect('turismo/turismo@localhost:1521')
