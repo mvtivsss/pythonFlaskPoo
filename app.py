@@ -41,7 +41,6 @@ def getComuna():
     else:
         return jsonify({"communes":[]})
 
-
 @app.route('/api/cities')
 def getCiudad():
     ciudad = [ciudadList for ciudadList in ciudadController.getCiudad()]
@@ -51,6 +50,31 @@ def getCiudad():
     else:
         return jsonify({"cities":[]})
 
+@app.route('/api/serviciosExtra')
+def getServExtra():
+    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
+    # print(servicios)
+    if servicios:
+        return jsonify({'servicios': servicios})
+    else:
+        return jsonify({"message":'no existen servicios extra'})
+
+@app.route('/api/acta')
+def getActa():
+    actas=[]
+    actas = [listaActa for listaActa in actaController.getActa()]
+    if (len(actas) > 0 ):
+        return jsonify({'Actas': actas})
+    else:
+        return jsonify({"message":'no existen actas'})
+
+@app.route('/api/departments', methods=['GET'])
+def getDepartments():
+    departamentos = [departmentList for departmentList in departmentController.getDepartments()]
+    if (len(departamentos)> 0):
+        return jsonify({'departments':departamentos })
+    else:
+        return jsonify({'departments':[] })
 
 @app.route('/api/departments', methods=['POST'])
 def addDepartment():
@@ -63,35 +87,25 @@ def addDepartment():
     except Exception as err:
         return print(err)
 
-@app.route('/api/serviciosExtra')
-def getServExtra():
-    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
-    # print(servicios)
-    if servicios:
-        return jsonify({'servicios': servicios})
-    else:
-        return jsonify({"message":'no existen servicios extra'})
+@app.route('/api/departments', methods=['PUT'])
+def updateDepartment():
+    try:
+        data = request.get_json()
+        departmentController.updateDepartment(data['id'],data['name'], data['address'],data['totalRooms'], data['totalParking'],data['totalBaths'],
+              data['internet'],data['tv'],data['heating'],data['furnished'],data['departmentPrice'],
+              data['departmentStatus'],data['departmentDesc'],data["idCommune"])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
 
-
-
-@app.route('/api/acta')
-def getActa():
-    actas=[]
-    actas = [listaActa for listaActa in actaController.getActa()]
-    if (len(actas) > 0 ):
-        return jsonify({'Actas': actas})
-    else:
-        return jsonify({"message":'no existen actas'})
-
-
-@app.route('/api/departments', methods=['GET'])
-def getDepartments():
-    departamentos = [departmentList for departmentList in departmentController.getDepartments()]
-    if (len(departamentos)> 0):
-        return jsonify({'departments':departamentos })
-    else:
-        return jsonify({'departments':[] })
-
+@app.route('/api/departments', methods=['DELETE'])
+def deleteDepartment():
+    try:
+        data = request.get_json()
+        departmentController.deleteDepartment(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
 
 @app.route('/api/clients')
 def getClients():
@@ -100,8 +114,6 @@ def getClients():
         return jsonify({'Clientes' : clients})
     else:
         return jsonify({"message":'no existen clientes'})
-
-
 
 # @app.route('/regions/<string:region_name>')
 # def getRegion(region_name):

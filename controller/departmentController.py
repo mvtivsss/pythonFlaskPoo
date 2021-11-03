@@ -25,3 +25,22 @@ def addDepartment(nombre, direccion,habitaciones,
      return True
     except Exception as err:
         print('no se pudo agregar la Department')
+
+def updateDepartment(id,nombre, direccion,habitaciones,
+                  estacionamientos, banos, internet, cable,
+                  calefaccion, amoblado, precio, estado, descripcion,comuna):
+    try:
+     connector.callProcedureParameters('spUpdateDepartments', [id,nombre, direccion,habitaciones,estacionamientos, banos, internet, cable,
+                                                           calefaccion, amoblado, precio, estado, descripcion,comuna])
+     print('ok update')
+     return True
+    except Exception as err:
+        print('no se pudo agregar department')
+
+def deleteDepartment(id):
+    try:
+     connector.callProcedureParameters('spDeleteDepartments', [id])
+     print('ok delete')
+     return True
+    except Exception as err:
+        print('no se pudo agregar department')
