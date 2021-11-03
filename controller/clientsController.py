@@ -5,7 +5,7 @@ def getClients():
         response = []
         clientsList = [lista for lista in connector.callProcedure('spGetclients')]
         for clients in clientsList:
-            response.append({'id':clients[0],'nombre': clients[1], 'apPaterno':clients[2],
+            response.append({'id':clients[0],'name': clients[1], 'apPaterno':clients[2],
                              'apMaterno':clients[3],'fNacimiento':clients[4], 'mail': clients[5],
                              'celular': clients[6], 'pass':clients[7], 'worker' : ''})
             print(response)

@@ -5,9 +5,9 @@ def getDepartments():
         response = []
         departmentsList = [lista for lista in connector.callProcedure('spGetDepartments')]
         for departments in departmentsList:
-            response.append({'id':departments[0],'nombre': departments[1], 'direccion':departments[2],'cantHabitaciones':departments[3], 'cantEstacionamiento': departments[4],
-                             'cantBanos': departments[5], 'internet':departments[6], 'cable': departments[7],'calefaccion':departments[8], 'amoblado': departments[9],
-                             'precioDpto': departments[10], 'estadoDpto': departments[11],'descripcionDpto':departments[12]})
+            response.append({'id':departments[0],'name': departments[1], 'address':departments[2],'totalRooms':departments[3], 'totalParking': departments[4],
+                             'totalBaths': departments[5], 'internet':departments[6], 'tv': departments[7],'heating':departments[8], 'furnished': departments[9],
+                             'departmentPrice': departments[11], 'departmentStatus': departments[12],'departmentDesc':departments[13], 'idCommune':departments[14]})
             print(response)
         return response
     except Exception as err:
@@ -15,12 +15,12 @@ def getDepartments():
     finally:
         return response
 
-def addDepartment(id, nombre, direccion,habitaciones,
+def addDepartment(nombre, direccion,habitaciones,
                   estacionamientos, banos, internet, cable,
-                  calefaccion, amoblado, precio, estado, descripcion):
+                  calefaccion, amoblado, precio, estado, descripcion,comuna):
     try:
-     connector.callProcedureParameters('spAddDepartment', [id,nombre, direccion,habitaciones,estacionamientos, banos, internet, cable,
-                                                           calefaccion, amoblado, precio, estado, descripcion])
+     connector.callProcedureParameters('spAddDepartment', [nombre, direccion,habitaciones,estacionamientos, banos, internet, cable,
+                                                           calefaccion, amoblado, precio, estado, descripcion,comuna])
      print('ok insert')
      return True
     except Exception as err:

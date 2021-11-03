@@ -6,7 +6,7 @@ def getServExtra():
         print(serviciosExtra)
         response = []
         for servicio in serviciosExtra:
-            response.append({'id':servicio[0],'descripcion':servicio[1], 'valor': servicio[2]})
+            response.append({'id':servicio[0],'description':servicio[1], 'price': servicio[2]})
             # print(servicio)
         return response
     except Exception as ex:

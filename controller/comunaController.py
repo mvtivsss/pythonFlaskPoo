@@ -5,7 +5,7 @@ def getComuna():
         response = []
         comunaList = [lista for lista in connector.callProcedure('spGetComuna')]
         for comuna in comunaList:
-            response.append({'id':comuna[0],'nombre': comuna[1]})
+            response.append({'id':comuna[0],'name': comuna[1]})
             print(response)
         return response
     except Exception as err:
