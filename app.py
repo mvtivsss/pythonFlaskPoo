@@ -4,7 +4,7 @@ from flask import Flask, json, jsonify, request
 # from clients import clientes
 # from BD import configuracion
 from controller import regionController as region, servicioExtraController as servicioExtra
-from controller import actaController, departmentController
+from controller import actaController, departmentController, clientsController, comunaController, ciudadController
 
 app = Flask(__name__)
 
@@ -12,45 +12,60 @@ app = Flask(__name__)
 def inicio():
     return 'PÁGINA DE INICIO'
 
-@app.route('/regions')
+@app.route('/api/regions', methods=['GET'])
 def getRegions():
     regiones = [regionList for regionList in region.getRegiones()]
     # listRegiones = json.dumps(regiones)
     print(regiones)
     if (len(regiones) > 0):
-        return jsonify({"Regiones":regiones})
+        return jsonify({"regiones":regiones})
 
-@app.route('/departments', methods=['POST'])
+@app.route('/api/regions', methods=['POST'])
+def addRegion():
+    try:
+        data = request.get_json()
+        print(data['id'], data['nombre'])
+        region.addRegion(data['id'], data['nombre'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return 
+
+@app.route('/api/comuna')
+def getComuna():
+    comuna = [comunaList for comunaList in comunaController.getComuna()]
+    print(comuna)
+    if (len(comuna) > 0):
+        return jsonify({"comunas":comuna})
+
+@app.route('/api/ciudad')
+def getCiudad():
+    ciudad = [ciudadList for ciudadList in ciudadController.getCiudad()]
+    print(ciudad)
+    if (len(ciudad) > 0):
+        return jsonify({"ciudades":ciudad})
+
+@app.route('/api/departments', methods=['POST'])
 def addDepartment():
-    newDepartment = {
-        "amoblado": request.json["amoblado"], 
-        "cable": request.json["cable"], 
-        "calefaccion": request.json["calefaccion"], 
-        "cantBanos": request.json["cantBanos"], 
-        "cantEstacionamiento": request.json["cantEstacionamiento"], 
-        "cantHabitaciones": request.json["cantHabitaciones"], 
-        "descripcionDepto": request.json["descripcionDepto"], 
-        "direccion": request.json["direccion"], 
-        "estadoDpto": request.json["estadoDpto"], 
-        "id": request.json["id"], 
-        "internet": request.json["internet"], 
-        "nombre": request.json["nombre"], 
-        "precioDpto": request.json["precioDpto"]
-    }
-    lista = region.getRegiones().append(newDepartment)
-    return jsonify({"message": "Departamento agregado !", "Departamentos" : lista})
+    try:
+        data = request.get_json()
+        print(data['id'], data['nombre'])
+        departmentController.addDepartment(data['id'], data['nombre'], data['direccion'],data['cantHabitaciones'], data['cantEstacionamiento'],data['cantBanos'],
+              data['internet'],data['cable'],data['calefaccion'],data['amoblado'],data['precioDpto'],
+              data['estadoDpto'],data['descripcionDpto'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
 
-
-@app.route('/serviciosExtra')
+@app.route('/api/serviciosExtra')
 def getServExtra():
     servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
     # print(servicios)
     if servicios:
-        return jsonify({'Servicios': servicios})
+        return jsonify({'servicios': servicios})
     else: 
-        return 'Datos'
+        return jsonify({'message': 'ups'} )
 
-@app.route('/acta')
+@app.route('/api/acta')
 def getActa():
     actas=[]
     actas = [listaActa for listaActa in actaController.getActa()]
@@ -59,11 +74,18 @@ def getActa():
     else:
         return 'Acta Else'
 
-@app.route('/departments')
+@app.route('/api/departments', methods=['GET'])
 def getDepartments():
     departamentos = [departmentList for departmentList in departmentController.getDepartments()]
     if (len(departamentos)> 0):
         return jsonify({'Departamentos':departamentos })
+
+@app.route('/api/clients')
+def getClients():
+    clients = [clientList for clientList in clientsController.getClients()]
+    if(len(clients) > 0 ):
+        return jsonify({'Clientes' : clients})
+
 
 # @app.route('/regions/<string:region_name>')
 # def getRegion(region_name):
