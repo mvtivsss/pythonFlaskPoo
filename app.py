@@ -4,7 +4,7 @@ from flask import Flask, json, jsonify, request
 # from clients import clientes
 # from BD import configuracion
 from controller import regionController as region, servicioExtraController as servicioExtra
-from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController
+from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
 
 app = Flask(__name__)
 
@@ -115,20 +115,28 @@ def getInventory():
     else:
         return jsonify({'inventories':[] })
 
-@app.route('/api/inventories', methods=['POST'])
+@app.route('/api/inventoriesDepartment', methods=['GET'])
+def getInventoryDepartments():
+    inventario = [inventarioList for inventarioList in inventarioDepartamentoController.getInventoryDepartment()]
+    if (len(inventario)> 0):
+        return jsonify({'inventoriesDepartments':inventario })
+    else:
+        return jsonify({'inventoriesDepartments':[] })
+
+@app.route('/api/inventoriesDepartment', methods=['POST'])
 def addInventoryDepartment():
     try:
         data = request.get_json()
-        inventarioController.addInventoryDepartment(data['id'],data['quantity'],data["departmentId"],data["inventoryId"])
+        inventarioDepartamentoController.addInventoryDepartment(data['id'],data['quantity'],data["departmentId"],data["inventoryId"])
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
 
-@app.route('/api/inventories', methods=['DELETE'])
+@app.route('/api/inventoriesDepartment', methods=['DELETE'])
 def deleteInventoryDepartment():
     try:
         data = request.get_json()
-        inventarioController.deleteInventoryDepartment(data["id"])
+        inventarioDepartamentoController.deleteInventoryDepartment(data["id"])
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
