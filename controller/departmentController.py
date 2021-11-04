@@ -7,7 +7,8 @@ def getDepartments():
         for departments in departmentsList:
             response.append({'id':departments[0],'name': departments[1], 'address':departments[2],'totalRooms':departments[3], 'totalParking': departments[4],
                              'totalBaths': departments[5], 'internet':departments[6], 'tv': departments[7],'heating':departments[8], 'furnished': departments[9],
-                             'departmentPrice': departments[11], 'departmentStatus': departments[12],'departmentDesc':departments[13], 'idCommune':departments[14]})
+                             'departmentPrice': departments[10], 'departmentStatus': departments[11],'departmentDesc':departments[12], 'idCommune':departments[13],
+                             'nameCommune': departments[14]})
             print(response)
         return response
     except Exception as err:
