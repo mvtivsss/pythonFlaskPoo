@@ -22,9 +22,9 @@ def addInventoryDepartment(id,cantidad,id_dpto,id_inventario):
     except Exception as err:
         print('error insert')
 
-def deleteInventory(id):
+def deleteInventoryDepartment(id):
     try:
-     connector.callProcedureParameters('spDeleteInventory', [id])
+     connector.callProcedureParameters('spDeleteInventoryDepartment', [id])
      print('ok delete')
      return True
     except Exception as err:

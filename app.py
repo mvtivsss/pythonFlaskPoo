@@ -125,10 +125,10 @@ def addInventoryDepartment():
         return print(err)
 
 @app.route('/api/inventories', methods=['DELETE'])
-def deleteInventory():
+def deleteInventoryDepartment():
     try:
         data = request.get_json()
-        inventarioController.deleteInventory(data["id"])
+        inventarioController.deleteInventoryDepartment(data["id"])
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
