@@ -4,7 +4,7 @@ from flask import Flask, json, jsonify, request
 # from clients import clientes
 # from BD import configuracion
 from controller import regionController as region, servicioExtraController as servicioExtra
-from controller import actaController, departmentController, clientsController, comunaController, ciudadController
+from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController
 
 app = Flask(__name__)
 
@@ -107,13 +107,39 @@ def deleteDepartment():
     except Exception as err:
         return print(err)
 
-@app.route('/api/clients')
-def getClients():
-    clients = [clientList for clientList in clientsController.getClients()]
-    if(len(clients) > 0 ):
-        return jsonify({'Clientes' : clients})
+@app.route('/api/inventories', methods=['GET'])
+def getInventory():
+    inventario = [inventarioList for inventarioList in inventarioController.getInventories()]
+    if (len(inventario)> 0):
+        return jsonify({'inventories':inventario })
     else:
-        return jsonify({"message":'no existen clientes'})
+        return jsonify({'inventories':[] })
+
+@app.route('/api/inventories', methods=['POST'])
+def addInventory():
+    try:
+        data = request.get_json()
+        inventarioController.addInventory(data['name'],data['description'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
+@app.route('/api/inventories', methods=['DELETE'])
+def deleteInventory():
+    try:
+        data = request.get_json()
+        inventarioController.deleteInventory(data["id"])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
+# @app.route('/api/clients')
+# def getClients():
+#     clients = [clientList for clientList in clientsController.getClients()]
+#     if(len(clients) > 0 ):
+#         return jsonify({'Clientes' : clients})
+#     else:
+#         return jsonify({"message":'no existen clientes'})
 
 # @app.route('/regions/<string:region_name>')
 # def getRegion(region_name):

@@ -77,3 +77,15 @@ BEGIN
         dbms_output.put_line(sqlerrm);
 END spGetServExtra;
 /
+
+CREATE OR REPLACE PROCEDURE TURISMO.spGetInventory 
+(pInventario out sys_refcursor)
+AS
+BEGIN
+  OPEN pInventario FOR
+    SELECT "i".NOMBRE_OBJ, "i".ID_OBJ, "i".DESC_OBJ FROM INVENTARIO "i";
+  EXCEPTION
+      WHEN OTHERS THEN
+          dbms_output.put_line(sqlerrm);
+END;
+/
