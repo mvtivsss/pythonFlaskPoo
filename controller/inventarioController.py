@@ -12,20 +12,3 @@ def getInventories():
         print('Error en controller ', err)
     finally:
         return response
-
-
-def addInventoryDepartment(id,cantidad,id_dpto,id_inventario):
-    try:
-     connector.callProcedureParameters('spAddInventoryDepartment', [id,cantidad,id_dpto,id_inventario])
-     print('ok insert')
-     return True
-    except Exception as err:
-        print('error insert')
-
-def deleteInventoryDepartment(id):
-    try:
-     connector.callProcedureParameters('spDeleteInventoryDepartment', [id])
-     print('ok delete')
-     return True
-    except Exception as err:
-        print('error delete')

@@ -5,7 +5,7 @@ from flask import Flask, json, jsonify, request
 # from BD import configuracion
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
-
+from controller import usuarioController, maintainsDepartmentController
 app = Flask(__name__)
 
 @app.route('/')
@@ -140,6 +140,34 @@ def deleteInventoryDepartment():
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
+
+@app.route('/api/users', methods=['GET'])
+def getUsers():
+    user = [userList for userList in usuarioController.getUsuarios()]
+    if (len(user)> 0):
+        return jsonify({'users':user })
+    else:
+        return jsonify({'users':[] })
+
+@app.route('/api/maintainsDepartments', methods=['POST'])
+def addMaintainDepartment():
+    try:
+        data = request.get_json()
+        maintainsDepartmentController.addMaintainsDepartments(data['initDate'],data["finishDate"],data["userId"],data["departmentId"])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
+@app.route('/api/maintainsDepartments',methods=['GET'])
+def getMaintainsDepartments():
+    maintains = [maintainsList for maintainsList in maintainsDepartmentController.getMaintainsDepartments()]
+    if (len(maintains)> 0):
+        return jsonify({'maintainsDepartments':maintains })
+    else:
+        return jsonify({'maintainsDepartments':[] })
+
+
+# @app.route('/api/maintainerDepartment', methods=['GET'])
 
 # @app.route('/api/clients')
 # def getClients():

@@ -20,30 +20,32 @@ BEGIN
         dbms_output.put_line(sqlerrm);
 END spGetRegion;
 /
-CREATE OR REPLACE PROCEDURE TURISMO.spGetDepartments
-  (pDepartments out sys_refcursor)
- AS
-BEGIN
-  OPEN pDepartments FOR
-      SELECT ID_DEPTO, NOM_DEPTO, DIRECCION_DEPTO, CANT_HABITACIONES, CANT_ESTACIONAMIENTOS,
-             CANT_BANOS, INTERNET, CABLE, CALEFACCION, AMOBLADO, FOTO_DEPTO, PRECIO_DEPTO,
-             ESTADO_DEPTO, DESCRIPCION_DEPTO, COMUNA_ID_COMUNA FROM DEPARTAMENTO;
-    EXCEPTION
-    WHEN OTHERS THEN
-        dbms_output.put_line(sqlerrm);
-END spGetDepartments;
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETDEPARTMENTS(PDEPARTMENTS OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN PDEPARTMENTS FOR
+    SELECT ID_DEPTO,
+           NOM_DEPTO,
+           DIRECCION_DEPTO,
+           CANT_HABITACIONES,
+           CANT_ESTACIONAMIENTOS,
+           CANT_BANOS,
+           INTERNET,
+           CABLE,
+           CALEFACCION,
+           AMOBLADO,
+           PRECIO_DEPTO,
+           ESTADO_DEPTO,
+           DESCRIPCION_DEPTO,
+           "c".ID_COMUNA,
+           "c".NOMBRE_COMUNA
+      FROM DEPARTAMENTO
+        JOIN COMUNA "c"
+          ON DEPARTAMENTO.COMUNA_ID_COMUNA = "c".ID_COMUNA;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM);
+  END SPGETDEPARTMENTS;
 /
--- CREATE OR REPLACE PROCEDURE TURISMO.spGetUsers
---   (pUsers out sys_refcursor)
---  AS
--- BEGIN
---   OPEN pUsers FOR
---       SELECT "u".ID_USU, "u".NOM_USU, "u".APP_USU, "u".APM_USU, "u".FNACIMIENTO_USU, "u".EMAIL_USU, "u".CELULAR_USU, "u".CONTRASENA_USU FROM USUARIO "u";
---     EXCEPTION
---     WHEN OTHERS THEN
---         dbms_output.put_line(sqlerrm);
--- END spGetClients;
--- /
 CREATE OR REPLACE PROCEDURE TURISMO.spGetCiudad
   (pCiudad out sys_refcursor)
  AS
@@ -88,4 +90,61 @@ BEGIN
       WHEN OTHERS THEN
           dbms_output.put_line(sqlerrm);
 END;
+/
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETINVENTORYDEPARTMENT(PINVENTORYDEPARTMENT OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN PINVENTORYDEPARTMENT FOR
+    SELECT "di".ID,
+           "di".CANTIDAD,
+           "di".DEPARTAMENTO_ID_DEPTO,
+           "i".ID_OBJ,"i".NOMBRE_OBJ
+      FROM DEPARTAMENTO_INVENTARIO "di"
+        JOIN INVENTARIO "i"
+          ON "di".INVENTARIO_ID_OBJ = "i".ID_OBJ;
+  END;
+/
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETUSERS(PUSER OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN PUSER FOR
+    SELECT "u".ID_USU,
+           "u".NOM_USU,
+           "u".APP_USU,
+           "u".APM_USU,
+           "u".FNACIMIENTO_USU,
+           "u".EMAIL_USU,
+           "u".CELULAR_USU,
+           "u".CONTRASENA_USU,
+           "c".ID_COMUNA,
+           "c".NOMBRE_COMUNA,
+           "tu".ID_TIPO,
+           "tu".NOMBRE_TIPO
+      FROM USUARIO "u"
+        JOIN COMUNA "c"
+          ON "u".COMUNA_ID_COMUNA = "c".ID_COMUNA
+        JOIN TIPO_USUARIO "tu"
+          ON "u".TIPO_USUARIO_ID_TIPO = "tu".ID_TIPO;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM);
+  END;
+/
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETMAINTAINSDEPARTMENT(PMAINTAINS OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN PMAINTAINS FOR
+    SELECT "m".ID_MANTENCION,
+           TO_CHAR("m".FECHA_INICIO,'DD/MM/YYYY'),
+           TO_CHAR("m".FECHA_TERMINO,'DD/MM/YYYY'),
+           "u".ID_USU,
+           "u".NOM_USU ||'-'||"u".APP_USU||'-'|| "u".APM_USU  AS nameUser,
+           "m".DEPARTAMENTO_ID_DEPTO
+      FROM MANTENCION "m"
+        JOIN USUARIO "u"
+          ON "m".ID_FUNCIONARIO = "u".ID_USU;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM);
+  END;
 /
