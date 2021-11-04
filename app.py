@@ -1,8 +1,5 @@
 from types import MethodType
 from flask import Flask, json, jsonify, request
-# from regions import regions
-# from clients import clientes
-# from BD import configuracion
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
 from controller import usuarioController, maintainsDepartmentController

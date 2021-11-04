@@ -137,7 +137,7 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPGETUSERS(PUSER OUT SYS_REFCURSOR)
            "u".NOM_USU,
            "u".APP_USU,
            "u".APM_USU,
-           "u".FNACIMIENTO_USU,
+           TO_CHAR("u".FNACIMIENTO_USU,'DD/MM/YYYY'),
            "u".EMAIL_USU,
            "u".CELULAR_USU,
            "u".CONTRASENA_USU,
