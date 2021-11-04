@@ -14,9 +14,9 @@ def getInventories():
         return response
 
 
-def addInventory(nombre,descripcion):
+def addInventoryDepartment(id,cantidad,id_dpto,id_inventario):
     try:
-     connector.callProcedureParameters('spAddInventory', [nombre,descripcion])
+     connector.callProcedureParameters('spAddInventoryDepartment', [id,cantidad,id_dpto,id_inventario])
      print('ok insert')
      return True
     except Exception as err:

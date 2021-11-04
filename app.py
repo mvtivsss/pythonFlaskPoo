@@ -116,10 +116,10 @@ def getInventory():
         return jsonify({'inventories':[] })
 
 @app.route('/api/inventories', methods=['POST'])
-def addInventory():
+def addInventoryDepartment():
     try:
         data = request.get_json()
-        inventarioController.addInventory(data['name'],data['description'])
+        inventarioController.addInventoryDepartment(data['id'],data['quantity'],data["departmentId"],data["inventoryId"])
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
