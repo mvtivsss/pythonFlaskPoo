@@ -58,8 +58,8 @@ def getServExtra():
 
 @app.route('/api/acta')
 def getActa():
-    actas=[]
     actas = [listaActa for listaActa in actaController.getActa()]
+    print(actas)
     if (len(actas) > 0 ):
         return jsonify({'Actas': actas})
     else:
