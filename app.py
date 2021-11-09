@@ -173,6 +173,36 @@ def getUsers():
     else:
         return jsonify({'users':[] })
 
+@app.route('/api/users', methods=['POST'])
+def userInit():
+    try:
+        data = request.get_json()
+        usuarioController.usuarioInit(data['firstName'],data['lastNameP'],data['lastNameM'], data['dateOfBirth'], data['mail'],
+        data['phone'], data['pass'], data['idCommune'], data['idType'])
+        print(data)
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
+@app.route('/api/users', methods=['PUT'])
+def updateUser():
+    try:
+        data = request.get_json()
+        usuarioController.updateUser(data['id'],data['firstName'],data['lastNameP'],data['lastNameM'], data['dateOfBirth'], data['mail'],
+        data['phone'], data['pass'], data['idCommune'], data['idType'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
+@app.route('/api/users', methods=['DELETE'])
+def deleteUser():
+    try:
+        data = request.get_json()
+        usuarioController.deleteUser(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
 @app.route('/api/maintainsDepartments', methods=['POST'])
 def addMaintainDepartment():
     try:
@@ -189,6 +219,7 @@ def getMaintainsDepartments():
         return jsonify({'maintainsDepartments':maintains })
     else:
         return jsonify({'maintainsDepartments':[] })
+
 
 
 # @app.route('/api/maintainerDepartment', methods=['GET'])
