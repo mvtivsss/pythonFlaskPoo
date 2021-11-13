@@ -48,6 +48,31 @@ def callProcedureParameters(procedureName,parameters):
         con.close()
         return lista
 
+def callProcedureIdRefCursor(procedureName,id):
+    lista = []
+    try:
+        con = conn.connect('turismo/turismo@localhost:1521')
+    except Exception as err:
+        print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
+    else:
+        try:
+            cursor = con.cursor()
+            refCursor = con.cursor()
+            cursor.callproc(procedureName,keywordParameters = dict(p2 = id,p3 =  refCursor))
+            # myvar = cursor.var(conn.NUMBER)
+            for row in refCursor:           
+                # print(row)
+                lista.append(row)
+                print(row)
+        except Exception as err:
+            print('Error ocasionado en el procedimiento almacenado.', err)
+        finally:
+            cursor.close()
+            refCursor.close()
+    finally:
+        con.close()
+        return lista
+
 def callExecute(query,parameters):
     lista = []
     try:

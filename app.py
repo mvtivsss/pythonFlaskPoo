@@ -2,7 +2,7 @@ from types import MethodType
 from flask import Flask, json, jsonify, request
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
-from controller import usuarioController, maintainsDepartmentController
+from controller import usuarioController, maintainsDepartmentController, typeUserController
 app = Flask(__name__)
 
 @app.route('/')
@@ -151,7 +151,7 @@ def getInventoryDepartments():
 def addInventoryDepartment():
     try:
         data = request.get_json()
-        inventarioDepartamentoController.addInventoryDepartment(data['id'],data['quantity'],data["departmentId"],data["inventoryId"])
+        inventarioDepartamentoController.addInventoryDepartment(data['quantity'],data["departmentId"],data["inventoryId"])
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
@@ -220,7 +220,24 @@ def getMaintainsDepartments():
     else:
         return jsonify({'maintainsDepartments':[] })
 
+@app.route('/api/maintainsDepartmentsById',methods=['GET'])
+def getMaintainsDepartmentsById():
+    data = request.get_json()
+    print(data)
+    maintains = [maintainsList for maintainsList in maintainsDepartmentController.getMaintainDepartmentById(data['id'])]
+    # print(data)
+    if (len(maintains)> 0):
+        return jsonify({'maintainsDepartments':maintains })
+    else:
+        return jsonify({'maintainsDepartments':[] })
 
+@app.route('/api/typeUser', methods=['GET'])
+def getTypeUser():
+    typeUser = [typeUserList for typeUserList in typeUserController.getTypeUser()]
+    if(len(typeUser) > 0):
+        return jsonify({'typeUsers': typeUser})
+    else:
+        return jsonify({'typeUsers': []})
 
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 

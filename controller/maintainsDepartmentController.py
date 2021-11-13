@@ -23,3 +23,19 @@ def getMaintainsDepartments():
         print('Error en controller ', err)
     finally:
         return response
+
+def getMaintainDepartmentById(id):
+    try:
+        response = []
+        maintainsDepartmentLista = [lista for lista in connector.callProcedureIdRefCursor('SPGETMAINTAINDEPARTMENTBYID',[id])]
+        print(maintainsDepartmentLista ,'controller')
+        for maintainsDepartment in maintainsDepartmentLista:
+            response.append({'id':maintainsDepartment[0],'initDate': maintainsDepartment[1],
+                             'finishDate':maintainsDepartment[2],'userId': maintainsDepartment[3],'userName':maintainsDepartment[4],
+                             'departmentId':maintainsDepartment[5]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Error en controller ', err)
+    finally:
+        return response
