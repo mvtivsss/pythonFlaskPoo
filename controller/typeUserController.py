@@ -5,7 +5,7 @@ def getTypeUser():
         response = []
         typeUserList = [lista for lista in connector.callProcedure('spGetTypeUser')]
         for typeUser in typeUserList:
-            response.append({'name':typeUser[0],'id': typeUser[1]})
+            response.append({'name':typeUser[1],'id': typeUser[0]})
             print(response)
         return response
     except Exception as err:

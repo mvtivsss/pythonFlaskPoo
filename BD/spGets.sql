@@ -164,3 +164,55 @@ CREATE OR REPLACE PROCEDURE TURISMO.spGetTypeUser (pTypeUsers OUT SYS_REFCURSOR)
   OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
 END;
 /
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETDEPARTMENTBYID(ID  IN  TURISMO.DEPARTAMENTO.ID_DEPTO % TYPE,
+                                                        CUR OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN CUR FOR
+    SELECT "d".ID_DEPTO,
+           "d".NOM_DEPTO,
+           "d".DIRECCION_DEPTO,
+           "d".CANT_HABITACIONES,
+           "d".CANT_ESTACIONAMIENTOS,
+           "d".CANT_BANOS,
+           "d".INTERNET,
+           "d".CABLE,
+           "d".CALEFACCION,
+           "d".AMOBLADO,
+           "d".PRECIO_DEPTO,
+           "d".ESTADO_DEPTO,
+           "r".NOMBRE_REGION || ', ' || "c1".NOMBRE_CIUDAD || ', ' || "c".NOMBRE_COMUNA AS UBICACION
+      FROM DEPARTAMENTO "d"
+        JOIN COMUNA "c"
+          ON "d".COMUNA_ID_COMUNA = "c".ID_COMUNA
+        JOIN CIUDAD "c1"
+          ON "c".CIUDAD_ID_CIUDAD = "c1".ID_CIUDAD
+        JOIN REGION "r"
+          ON "c1".REGION_ID_REGION = "r".ID_REGION
+      WHERE "d".ID_DEPTO = ID;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
+  END;
+/
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETMAINTAINDEPARTMENTBYID(COD IN  NUMBER,
+                                                                CUR OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN CUR FOR
+    SELECT "m".ID_MANTENCION,
+           TO_CHAR("m".FECHA_INICIO, 'DD/MM/YYYY'),
+           TO_CHAR("m".FECHA_TERMINO, 'DD/MM/YYYY'),
+           "u".ID_USU,
+           "u".NOM_USU || '-' || "u".APP_USU || '-' || "u".APM_USU AS NAMEUSER,
+           "m".DEPARTAMENTO_ID_DEPTO
+      FROM MANTENCION "m" 
+        JOIN USUARIO "u"
+          ON "m".ID_FUNCIONARIO = "u".ID_USU
+        JOIN DEPARTAMENTO "d"
+          ON "m".DEPARTAMENTO_ID_DEPTO = "d".ID_DEPTO
+      WHERE "m".DEPARTAMENTO_ID_DEPTO = COD;
+
+  END;
+/

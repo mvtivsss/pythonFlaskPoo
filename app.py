@@ -1,5 +1,6 @@
 from types import MethodType
 from flask import Flask, json, jsonify, request
+from flask.wrappers import Response
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
 from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController
@@ -252,11 +253,15 @@ def validateLogin():
     except Exception as err:
         return print(err)
 
-'''declare 
-begin 
-    SELECT * FROM TABLE;
-end'''
-
+@app.route('/api/departmentById', methods=['GET'])
+def getDepartmentById():
+    data = request.get_json()
+    department = [departmentList for departmentList in departmentController.getDepartmentById(data['id'])]
+    print(department)
+    if (len(department) > 0):
+        return jsonify({'department': department})
+    else:
+        return jsonify({'department': []})
 
 
 # @app.route('/api/maintainerDepartment', methods=['GET'])
