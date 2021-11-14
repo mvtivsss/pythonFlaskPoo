@@ -48,7 +48,7 @@ def callProcedureParameters(procedureName,parameters):
         con.close()
         return lista
 
-def callProcedureIdRefCursor(procedureName,id):
+def callProcedureIdRefCursor(procedureName,parameters):
     lista = []
     try:
         con = conn.connect('turismo/turismo@localhost:1521')
@@ -58,7 +58,7 @@ def callProcedureIdRefCursor(procedureName,id):
         try:
             cursor = con.cursor()
             refCursor = con.cursor()
-            cursor.callproc(procedureName,keywordParameters = dict(p2 = id,p3 =  refCursor))
+            cursor.callproc(procedureName,parameters+[refCursor])
             # myvar = cursor.var(conn.NUMBER)
             for row in refCursor:           
                 # print(row)
@@ -83,12 +83,9 @@ def callExecute(query,parameters):
         try:
             cursor = con.cursor()
             refCursor = con.cursor()
-            # cursor.execute(query,parameters)
+
+            cursor.execute(query,parameters)
             cursor.executemany(query, parameters)
-            # myvar = cursor.var(conn.NUMBER)
-            # for row in refCursor:           
-            #     # print(row)
-            #     lista.append(row)
             print('ok insert')
             return True
         except Exception as err:

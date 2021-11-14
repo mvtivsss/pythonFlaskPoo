@@ -2,7 +2,7 @@ from types import MethodType
 from flask import Flask, json, jsonify, request
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
-from controller import usuarioController, maintainsDepartmentController, typeUserController
+from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController
 app = Flask(__name__)
 
 @app.route('/')
@@ -238,6 +238,26 @@ def getTypeUser():
         return jsonify({'typeUsers': typeUser})
     else:
         return jsonify({'typeUsers': []})
+
+@app.route('/api/validateLogin')
+def validateLogin():
+    try:
+        json = request.get_json()
+        datos = loginController.validateLogin(json['mail'],json['password'])
+        # print(datos)
+        if(len(datos)> 0):
+            return jsonify({'user': datos})
+        else:
+            return jsonify({'user': []})
+    except Exception as err:
+        return print(err)
+
+'''declare 
+begin 
+    SELECT * FROM TABLE;
+end'''
+
+
 
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 
