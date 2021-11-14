@@ -263,6 +263,16 @@ def getDepartmentById():
     else:
         return jsonify({'department': []})
 
+@app.route('/api/departmentByDisponibility', methods=['GET'])
+def getDepartmentByDisponibility():
+    data = request.get_json()
+    department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(data['disponibility'])]
+    print(department)
+    if(len(department) > 0):
+        return jsonify({'departments': department})
+    else:
+        return jsonify({'department': []})
+
 
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 

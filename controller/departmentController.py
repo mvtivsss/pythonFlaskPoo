@@ -31,6 +31,21 @@ def getDepartmentById(id):
     finally: 
         return response
 
+def getDepartmentByDisponibility(disponibility):
+    try:
+        response = []
+        departmentByIdList = connector.callProcedureIdRefCursor('SPGETDEPARTMENTBYDISPONIBILITY',[disponibility])
+        for department in departmentByIdList:
+            response.append({'id':department [0],'name': department [1], 'address':department [2],'totalRooms':department [3], 'totalParking': department [4],
+                             'totalBaths': department [5], 'internet':department [6], 'tv': department [7],'heating':department [8], 'furnished': department [9],
+                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12]})
+            print(response)
+        return response
+    except Exception as err:
+        print('error en controller', err)
+    finally: 
+        return response
+
 
 
 def addDepartment(nombre, direccion,habitaciones,
