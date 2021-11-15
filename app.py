@@ -272,7 +272,15 @@ def getDepartmentByDisponibility():
     else:
         return jsonify({'department': []})
 
-
+@app.route('/api/updateDisponibility', methods=['PUT'])
+def updateDisponibility():
+    try:
+        data = request.get_json()
+        departmentController.updateDisponibility(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+    
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 
 # @app.route('/api/clients')

@@ -70,6 +70,14 @@ def updateDepartment(id,nombre, direccion,habitaciones,
     except Exception as err:
         print('no se pudo agregar department')
 
+def updateDisponibility(id):
+    try:
+        connector.callProcedureParameters('spUpdateDisponibility',[id])
+        print('ok update disponibility')
+        return True
+    except Exception as err:
+        print('no se pudo actualizar la disponibilidad', err)
+
 def deleteDepartment(id):
     try:
      connector.callProcedureParameters('spDeleteDepartments', [id])
