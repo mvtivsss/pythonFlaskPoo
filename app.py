@@ -1,6 +1,5 @@
 from types import MethodType
 from flask import Flask, json, jsonify, request
-from flask.wrappers import Response
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
 from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController
@@ -240,7 +239,7 @@ def getTypeUser():
     else:
         return jsonify({'typeUsers': []})
 
-@app.route('/api/validateLogin')
+@app.route('/api/validateLogin', methods=['POST'])
 def validateLogin():
     try:
         json = request.get_json()
