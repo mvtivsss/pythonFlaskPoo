@@ -216,3 +216,65 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPGETMAINTAINDEPARTMENTBYID(COD IN  NUMBER,
 
   END;
 /
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETDEPARTMENTBYID(ID  IN  TURISMO.DEPARTAMENTO.ID_DEPTO % TYPE,
+                                                        CUR OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN CUR FOR
+    SELECT "d".ID_DEPTO,
+           "d".NOM_DEPTO,
+           "d".DIRECCION_DEPTO,
+           "d".CANT_HABITACIONES,
+           "d".CANT_ESTACIONAMIENTOS,
+           "d".CANT_BANOS,
+           "d".INTERNET,
+           "d".CABLE,
+           "d".CALEFACCION,
+           "d".AMOBLADO,
+           "d".PRECIO_DEPTO,
+           "d".ESTADO_DEPTO,
+           "r".NOMBRE_REGION || ', ' || "c1".NOMBRE_CIUDAD || ', ' || "c".NOMBRE_COMUNA AS UBICACION
+      FROM DEPARTAMENTO "d"
+        JOIN COMUNA "c"
+          ON "d".COMUNA_ID_COMUNA = "c".ID_COMUNA
+        JOIN CIUDAD "c1"
+          ON "c".CIUDAD_ID_CIUDAD = "c1".ID_CIUDAD
+        JOIN REGION "r"
+          ON "c1".REGION_ID_REGION = "r".ID_REGION
+      WHERE "d".ID_DEPTO = ID;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
+  END;
+/
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETDEPARTMENTBYDISPONIBILITY(DISPONIBILITY  IN  TURISMO.DEPARTAMENTO.ESTADO_DEPTO % TYPE,
+                                                                   CUR OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN CUR FOR
+    SELECT "d".ID_DEPTO,
+           "d".NOM_DEPTO,
+           "d".DIRECCION_DEPTO,
+           "d".CANT_HABITACIONES,
+           "d".CANT_ESTACIONAMIENTOS,
+           "d".CANT_BANOS,
+           "d".INTERNET,
+           "d".CABLE,
+           "d".CALEFACCION,
+           "d".AMOBLADO,
+           "d".PRECIO_DEPTO,
+           "d".ESTADO_DEPTO,
+           "r".NOMBRE_REGION || ', ' || "c1".NOMBRE_CIUDAD || ', ' || "c".NOMBRE_COMUNA AS UBICACION
+      FROM DEPARTAMENTO "d"
+        JOIN COMUNA "c"
+          ON "d".COMUNA_ID_COMUNA = "c".ID_COMUNA
+        JOIN CIUDAD "c1"
+          ON "c".CIUDAD_ID_CIUDAD = "c1".ID_CIUDAD
+        JOIN REGION "r"
+          ON "c1".REGION_ID_REGION = "r".ID_REGION
+      WHERE "d".ESTADO_DEPTO = DISPONIBILITY;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
+  END;
+/
