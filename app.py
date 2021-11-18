@@ -2,7 +2,7 @@ from types import MethodType
 from flask import Flask, json, jsonify, request
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
-from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController
+from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController, reservaController
 app = Flask(__name__)
 
 @app.route('/')
@@ -281,6 +281,14 @@ def updateDisponibility():
     except Exception as err:
         return print(err)
     
+@app.route('/api/reserve', methods=['GET'])
+def getReserve():
+    reserva = [reservaList for reservaList in reservaController.getReservas()]
+    print(reserva)
+    if(len(reserva) > 0):
+        return jsonify({'reserves': reserva})
+    else:
+        return jsonify({'reserves': []})
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 
 # @app.route('/api/clients')

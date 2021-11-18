@@ -278,3 +278,42 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPGETDEPARTMENTBYDISPONIBILITY(DISPONIBILITY
     WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
   END;
 /
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETRESERVA(CUR OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN CUR FOR
+    SELECT "r".ID_RESERVA,
+           TO_CHAR("r".CHECK_IN_PLANIFICADO, 'DD/MM/YYYY'),
+           TO_CHAR("r".CHECK_IN, 'DD/MM/YYYY'),
+           TO_CHAR("r".CHECK_OUT, 'DD/MM/YYYY'),
+           "r".CANT_DIAS,
+           "r".CANT_ADULTOS,
+           "r".CANT_NINOS,
+           "r".TOTAL_RESERVA,
+           "r".ESTADO_RESERVA,
+           "r".DEPARTAMENTO_ID_DEPTO,
+           "r".ID_CLIENTE,
+           "r".ID_FUNCIONARIO,
+           "d".NOM_DEPTO,
+           "d".DIRECCION_DEPTO,
+           "d".CANT_HABITACIONES,
+           "d".CANT_ESTACIONAMIENTOS,
+           "d".CANT_BANOS,
+           "d".INTERNET,
+           "d".CABLE,
+           "d".CALEFACCION,
+           "d".AMOBLADO,
+           "d".PRECIO_DEPTO,
+           "d".ESTADO_DEPTO,
+           "d".DESCRIPCION_DEPTO,
+           "d".COMUNA_ID_COMUNA
+      FROM RESERVA "r"
+        JOIN DEPARTAMENTO "d"
+          ON "r".DEPARTAMENTO_ID_DEPTO = "d".ID_DEPTO
+        JOIN COMUNA "c"
+          ON "d".COMUNA_ID_COMUNA = "c".ID_COMUNA;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
+  END;
+/
