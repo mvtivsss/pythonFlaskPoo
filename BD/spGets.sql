@@ -1,7 +1,7 @@
 CREATE OR REPLACE PROCEDURE TURISMO.spGetActa
   (pActa out sys_refcursor)
  AS
-  BEGIN
+ BEGIN
   OPEN pActa FOR
       SELECT "a".ID_ACTA, "a".NOMBRE_MULTA, "a".DESCRIPCION_MULTA, "a".VALOR_MULTA FROM ACTA "a";
     EXCEPTION
@@ -23,14 +23,14 @@ END spGetCiudad;
 /
 
 CREATE OR REPLACE PROCEDURE TURISMO.spGetComuna
-    (pComuna out sys_refcursor)
-  AS
-  BEGIN
-    OPEN pComuna FOR
-        SELECT ID_COMUNA, NOMBRE_COMUNA FROM COMUNA "c";
-      EXCEPTION
-      WHEN OTHERS THEN
-          dbms_output.put_line(sqlerrm);
+  (pComuna out sys_refcursor)
+ AS
+ BEGIN
+  OPEN pComuna FOR
+      SELECT ID_COMUNA, NOMBRE_COMUNA FROM COMUNA "c";
+    EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line(sqlerrm);
 END spGetComuna;
 /
 
@@ -62,9 +62,9 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPGETDEPARTMENTS(PDEPARTMENTS OUT SYS_REFCUR
 /
 
 CREATE OR REPLACE PROCEDURE TURISMO.spGetInventory 
-  (pInventario out sys_refcursor)
-  AS
-  BEGIN
+ (pInventario out sys_refcursor)
+ AS
+ BEGIN
   OPEN pInventario FOR
   SELECT "i".NOMBRE_OBJ, "i".ID_OBJ, "i".DESC_OBJ FROM INVENTARIO "i";
   EXCEPTION
