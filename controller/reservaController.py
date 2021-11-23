@@ -32,3 +32,29 @@ def deleteMulta(id):
         return True
     except Exception as err:
         print(err)
+
+def getMulta(id):
+    try:
+        response = []
+        multaList = [lista for lista in connector.callProcedureIdRefCursor('spGetMulta',[id])]
+        for multa in multaList:
+            response.append({'id': multa[0], 'quantity': multa[1], 'subTotal' : multa[2], 'idActa': multa[3], 'idReserve': multa[4]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Error en controller', err)
+    finally:
+        return response  
+
+def getReservaServex(id):
+    try:
+        response = []
+        reservaServexList = [lista for lista in connector.callProcedureIdRefCursor('spGetReservaServex',[id])]
+        for reservaServex in reservaServexList:
+            response.append({'id': reservaServex[0], 'quantity': reservaServex[1], 'subTotal' : reservaServex[2], 'idServEx': reservaServex[3], 'idReserve': reservaServex[4]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Error en controller', err)
+    finally:
+        return response  

@@ -290,7 +290,7 @@ def getReserve():
     else:
         return jsonify({'reserves': []})
 
-@app.route('/api/addMulta', methods=['POST'])
+@app.route('/api/multa', methods=['POST'])
 def addMulta():
     try:
         data = request.get_json()
@@ -300,7 +300,7 @@ def addMulta():
     except Exception as err:
         return print(err)
 
-@app.route('/api/deleteMulta', methods=['DELETE'])
+@app.route('/api/multa', methods=['DELETE'])
 def deleteMulta():
     try:
         data = request.get_json()
@@ -309,6 +309,33 @@ def deleteMulta():
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
+
+@app.route('/api/multa', methods=['GET'])
+def getMulta():
+    try:
+        data = request.get_json()
+        multa = [multaList for multaList in reservaController.getMulta(data['idReserve'])]
+        print(multa)
+        if(len(multa)> 0):
+            return jsonify({'fines': multa})
+        else:
+            return jsonify({'fines': []})
+    except Exception as err:
+        print(err)
+
+@app.route('/api/reserveServex', methods=['GET'])
+def getReservaServex():
+    try:
+        data = request.get_json()
+        reservaServex = [reservaServexList for reservaServexList in reservaController.getReservaServex(data['idReserve'])]
+        print(reservaServex)
+        if(len(reservaServex)> 0):
+            return jsonify({'services': reservaServex})
+        else:
+            return jsonify({'services': []})
+    except Exception as err:
+        print(err)
+
 
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 
