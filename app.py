@@ -177,7 +177,7 @@ def getUsers():
 def userInit():
     try:
         data = request.get_json()
-        usuarioController.usuarioInit(data['firstName'],data['lastNameP'],data['lastNameM'], data['dateOfBirth'], data['mail'],
+        usuarioController.usuarioInit(data['firstName'],data['rut'],data['lastNameP'],data['lastNameM'], data['dateOfBirth'], data['mail'],
         data['phone'], data['pass'], data['idCommune'], data['idType'])
         print(data)
         return jsonify({'ok': True})
@@ -289,6 +289,54 @@ def getReserve():
         return jsonify({'reserves': reserva})
     else:
         return jsonify({'reserves': []})
+
+@app.route('/api/multa', methods=['POST'])
+def addMulta():
+    try:
+        data = request.get_json()
+        print(data)
+        reservaController.addMulta(data['quantity'], data['subTotal'], data['idActa'], data['idReserve'] )
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
+@app.route('/api/multa', methods=['DELETE'])
+def deleteMulta():
+    try:
+        data = request.get_json()
+        print(data)
+        reservaController.deleteMulta(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
+@app.route('/api/multa', methods=['GET'])
+def getMulta():
+    try:
+        data = request.get_json()
+        multa = [multaList for multaList in reservaController.getMulta(data['idReserve'])]
+        print(multa)
+        if(len(multa)> 0):
+            return jsonify({'fines': multa})
+        else:
+            return jsonify({'fines': []})
+    except Exception as err:
+        print(err)
+
+@app.route('/api/reserveServex', methods=['GET'])
+def getReservaServex():
+    try:
+        data = request.get_json()
+        reservaServex = [reservaServexList for reservaServexList in reservaController.getReservaServex(data['idReserve'])]
+        print(reservaServex)
+        if(len(reservaServex)> 0):
+            return jsonify({'services': reservaServex})
+        else:
+            return jsonify({'services': []})
+    except Exception as err:
+        print(err)
+
+
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 
 # @app.route('/api/clients')
@@ -333,4 +381,4 @@ def getReserve():
 #     return jsonify({'clientes': clientes})
 
 if __name__ == '__main__':
-    app.run(debug = True, port = 4000)
+    app.run(host="0.0.0.0",debug = True, port = 4000)

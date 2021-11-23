@@ -1,7 +1,7 @@
 CREATE OR REPLACE PROCEDURE TURISMO.spGetActa
   (pActa out sys_refcursor)
  AS
-  BEGIN
+ BEGIN
   OPEN pActa FOR
       SELECT "a".ID_ACTA, "a".NOMBRE_MULTA, "a".DESCRIPCION_MULTA, "a".VALOR_MULTA FROM ACTA "a";
     EXCEPTION
@@ -23,14 +23,14 @@ END spGetCiudad;
 /
 
 CREATE OR REPLACE PROCEDURE TURISMO.spGetComuna
-    (pComuna out sys_refcursor)
-  AS
-  BEGIN
-    OPEN pComuna FOR
-        SELECT ID_COMUNA, NOMBRE_COMUNA FROM COMUNA "c";
-      EXCEPTION
-      WHEN OTHERS THEN
-          dbms_output.put_line(sqlerrm);
+  (pComuna out sys_refcursor)
+ AS
+ BEGIN
+  OPEN pComuna FOR
+      SELECT ID_COMUNA, NOMBRE_COMUNA FROM COMUNA "c";
+    EXCEPTION
+    WHEN OTHERS THEN
+        dbms_output.put_line(sqlerrm);
 END spGetComuna;
 /
 
@@ -62,9 +62,9 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPGETDEPARTMENTS(PDEPARTMENTS OUT SYS_REFCUR
 /
 
 CREATE OR REPLACE PROCEDURE TURISMO.spGetInventory 
-  (pInventario out sys_refcursor)
-  AS
-  BEGIN
+ (pInventario out sys_refcursor)
+ AS
+ BEGIN
   OPEN pInventario FOR
   SELECT "i".NOMBRE_OBJ, "i".ID_OBJ, "i".DESC_OBJ FROM INVENTARIO "i";
   EXCEPTION
@@ -313,6 +313,40 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPGETRESERVA(CUR OUT SYS_REFCURSOR)
           ON "r".DEPARTAMENTO_ID_DEPTO = "d".ID_DEPTO
         JOIN COMUNA "c"
           ON "d".COMUNA_ID_COMUNA = "c".ID_COMUNA;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
+  END;
+/
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETMULTA(IDRESERVA IN  TURISMO.RESERVA_ACTA.ID % TYPE,
+                                               CUR       OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN CUR FOR
+    SELECT "ra".ID,
+           "ra".CANTIDAD_ACTA,
+           "ra".SUBTOTAL_ACTA,
+           "ra".ACTA_ID_ACTA,
+           "ra".RESERVA_ID_RESERVA
+      FROM RESERVA_ACTA "ra"
+      WHERE "ra".RESERVA_ID_RESERVA = IDRESERVA;
+  EXCEPTION
+    WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
+  END;
+/
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPGETRESERVASERVEX(IDRESERVA IN  TURISMO.RESERVA_ACTA.ID % TYPE,
+                                                       CUR       OUT SYS_REFCURSOR)
+  AS
+  BEGIN
+    OPEN CUR FOR
+    SELECT "rs".ID,
+           "rs".CANTIDAD_SERVEX,
+           "rs".SUBTOTAL_SERVEX,
+           "rs".SERVICIO_EXTRA_ID_SERV,
+           "rs".RESERVA_ID_RESERVA
+      FROM RESERVA_SERVEX "rs"
+      WHERE "rs".RESERVA_ID_RESERVA = IDRESERVA;
   EXCEPTION
     WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
   END;
