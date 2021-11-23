@@ -290,6 +290,26 @@ def getReserve():
     else:
         return jsonify({'reserves': []})
 
+@app.route('/api/reserve', methods=['POST'])
+def addReserve():
+    try:
+        data = request.get_json()
+        reservaController.addReserva(data['checkInPlanning'],data['checkIn'], data['checkOut'],data['totalDays'],
+                                     data['totalAdults'], data['totalKids'], data['totalBabies'],data['totalReserve'],
+                                     data['statusReserve'], data['departmentId'],data['clientId'], data['workerId'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
+@app.route('/api/reserve', methods=['DELETE'])
+def deleteReserve():
+    try:
+        data = request.get_json()
+        reservaController.deleteReserve(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
 @app.route('/api/multa', methods=['POST'])
 def addMulta():
     try:
@@ -337,48 +357,6 @@ def getReservaServex():
         print(err)
 
 
-# @app.route('/api/maintainerDepartment', methods=['GET'])
-
-# @app.route('/api/clients')
-# def getClients():
-#     clients = [clientList for clientList in clientsController.getClients()]
-#     if(len(clients) > 0 ):
-#         return jsonify({'Clientes' : clients})
-#     else:
-#         return jsonify({"message":'no existen clientes'})
-
-# @app.route('/regions/<string:region_name>')
-# def getRegion(region_name):
-#     regionFound = [region for region in regions if region['nombre']==region_name]
-#     if(len(regionFound)>0):
-#         return jsonify({"Regiones":regionFound[0]})
-#     return jsonify({"message": "region no encontrada !"})
-
-# @app.route('/regions/<int:region_id>', methods=["PUT"])
-# def editRegion(region_id):
-#     regionFound = [region for region in regions if region['id'] == region_id]
-#     if (len(regionFound) > 0):
-#         regionFound[0]['id'] = request.json['id']
-#         regionFound[0]['nombre'] = request.json['nombre']
-#         return jsonify({
-#             "Regiones": regionFound[0]
-#         })
-#     return jsonify({
-#         "message" : "Region no encontrada !"
-#     })
-
-# @app.route('/regions/<string:name>', methods=['DELETE'])
-# def deleteRegion(name):
-#     regionFound = [region for region in regions if region['nombre'] == name]
-#     regions.remove(regionFound[0])
-#     return jsonify({
-#         "message": "Region eliminada !",
-#         "Regiones": regionFound
-#     })
-
-# @app.route('/clients')
-# def getClients():
-#     return jsonify({'clientes': clientes})
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug = True, port = 4000)

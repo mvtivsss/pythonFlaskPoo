@@ -112,3 +112,30 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPADDMULTA(CANTIDAD  IN NUMBER,
     EXCEPTION WHEN OTHERS THEN DBMS_OUTPUT.PUT_LINE(SQLERRM());
   END;
 /
+
+CREATE OR REPLACE PROCEDURE TURISMO.SPADDRESERVA(CHECKIN_PLANIFICADO IN VARCHAR2,
+                                                 CHECKIN             IN VARCHAR2,
+                                                 CHECKOUT            IN VARCHAR2,
+                                                 CANTDIAS            IN TURISMO.RESERVA.CANT_DIAS % TYPE,
+                                                 CANTADULTOS         IN TURISMO.RESERVA.CANT_ADULTOS % TYPE,
+                                                 CANTNINOS           IN TURISMO.RESERVA.CANT_NINOS % TYPE,
+                                                 CANTBEBES           IN TURISMO.RESERVA.CANT_BEBES % TYPE,
+                                                 TOTALRESERVA        IN TURISMO.RESERVA.TOTAL_RESERVA % TYPE,
+                                                 ESTADORESERVA       IN TURISMO.RESERVA.ESTADO_RESERVA % TYPE,
+                                                 DEPTOID             IN TURISMO.RESERVA.DEPARTAMENTO_ID_DEPTO % TYPE,
+                                                 CLIENTEID           IN TURISMO.RESERVA.ID_CLIENTE % TYPE,
+                                                 FUNCIONARIOID       IN TURISMO.RESERVA.ID_FUNCIONARIO % TYPE)
+  AS
+    ID_AUX NUMBER;
+  BEGIN
+    SELECT SEQ_RESERVA.nextval
+      INTO ID_AUX
+      FROM DUAL "d";
+    INSERT INTO RESERVA (
+      ID_RESERVA, CHECK_IN_PLANIFICADO, CHECK_IN, CHECK_OUT, CANT_DIAS, CANT_ADULTOS, CANT_NINOS, CANT_BEBES, TOTAL_RESERVA, ESTADO_RESERVA, DEPARTAMENTO_ID_DEPTO, ID_CLIENTE, ID_FUNCIONARIO
+    )
+    VALUES (ID_AUX, TO_DATE(CHECKIN_PLANIFICADO, 'DD/MM/YYYY'), TO_DATE(CHECKIN, 'DD/MM/YYYY'), TO_DATE(CHECKOUT, 'DD/MM/YYYY'), CANTDIAS, CANTADULTOS, CANTNINOS, CANTBEBES, TOTALRESERVA, ESTADORESERVA, DEPTOID, CLIENTEID, FUNCIONARIOID);
+    COMMIT;
+    EXCEPTION WHEN OTHERS THEN dbms_output.put_line(SQLERRM());
+  END;
+/
