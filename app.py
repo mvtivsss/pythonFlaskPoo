@@ -177,7 +177,7 @@ def getUsers():
 def userInit():
     try:
         data = request.get_json()
-        usuarioController.usuarioInit(data['firstName'],data['lastNameP'],data['lastNameM'], data['dateOfBirth'], data['mail'],
+        usuarioController.usuarioInit(data['firstName'],data['rut'],data['lastNameP'],data['lastNameM'], data['dateOfBirth'], data['mail'],
         data['phone'], data['pass'], data['idCommune'], data['idType'])
         print(data)
         return jsonify({'ok': True})
@@ -289,6 +289,17 @@ def getReserve():
         return jsonify({'reserves': reserva})
     else:
         return jsonify({'reserves': []})
+
+@app.route('/api/addMulta', methods=['POST'])
+def addMulta():
+    try:
+        data = request.get_json()
+        print(data)
+        reservaController.addMulta(data['quantity'], data['subtotal'], data['idActa'], data['idReserve'] )
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 
 # @app.route('/api/clients')

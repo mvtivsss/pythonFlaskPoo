@@ -16,3 +16,11 @@ def getReservas():
         print('Error en controller ', err)
     finally:
         return response
+    
+def addMulta(cant, subtotal, idActa, idReserva):
+    try:
+        connector.callProcedureParameters('SPADDMULTA',[cant, subtotal, idActa, idReserva])
+        print('ok insert')
+        return True
+    except Exception as err:
+        print('Error en controller ', err)

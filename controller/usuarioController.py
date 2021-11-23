@@ -15,14 +15,14 @@ def getUsuarios():
     finally:
         return response
 
-def usuarioInit(nombre, apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo):
+def usuarioInit(nombre, rut, apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo):
     try:
-     connector.callProcedureParameters('spAddUser', [nombre, apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo])
+     connector.callProcedureParameters('spAddUser', [nombre, rut, apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo])
     #  connector.callExecute('COMMIT')
      print('ok insert')
      return True
     except Exception as err:
-        print('no se pudo agregar la el usuario')
+        print('no se pudo agregar el/la usuario/a')
 
 def updateUser(id,nombre, apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo):
     try:
@@ -31,7 +31,7 @@ def updateUser(id,nombre, apPaterno, apMaterno, fNacimiento, mail, telefono, con
      print('ok update')
      return True
     except Exception as err:
-        print('no se pudo actualizar la el usuario')
+        print('no se pudo actualizar el/la usuario/a')
 
 def deleteUser(id):
     try:
@@ -40,4 +40,4 @@ def deleteUser(id):
      print('ok delete')
      return True
     except Exception as err:
-        print('no se pudo eliminar el usuario')
+        print('no se pudo eliminar el/la usuario/a')
