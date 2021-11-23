@@ -24,3 +24,11 @@ def addMulta(cant, subtotal, idActa, idReserva):
         return True
     except Exception as err:
         print('Error en controller ', err)
+
+def deleteMulta(id):
+    try:
+        connector.callProcedureParameters('SPDELETEMULTA', [id])
+        print('ok Delete')
+        return True
+    except Exception as err:
+        print(err)

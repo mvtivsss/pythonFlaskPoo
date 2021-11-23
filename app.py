@@ -300,6 +300,16 @@ def addMulta():
     except Exception as err:
         return print(err)
 
+@app.route('/api/deleteMulta', methods=['DELETE'])
+def deleteMulta():
+    try:
+        data = request.get_json()
+        print(data)
+        reservaController.deleteMulta(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
+
 # @app.route('/api/maintainerDepartment', methods=['GET'])
 
 # @app.route('/api/clients')
