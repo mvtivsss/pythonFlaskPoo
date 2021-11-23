@@ -295,7 +295,7 @@ def addMulta():
     try:
         data = request.get_json()
         print(data)
-        reservaController.addMulta(data['quantity'], data['subtotal'], data['idActa'], data['idReserve'] )
+        reservaController.addMulta(data['quantity'], data['subTotal'], data['idActa'], data['idReserve'] )
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
