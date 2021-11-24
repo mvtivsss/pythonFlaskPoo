@@ -188,7 +188,7 @@ def userInit():
 def updateUser():
     try:
         data = request.get_json()
-        usuarioController.updateUser(data['id'],data['firstName'],data['lastNameP'],data['lastNameM'], data['dateOfBirth'], data['mail'],
+        usuarioController.updateUser(data['id'],data['rut'],data['firstName'],data['lastNameP'],data['lastNameM'], data['dateOfBirth'], data['mail'],
         data['phone'], data['pass'], data['idCommune'], data['idType'])
         return jsonify({'ok': True})
     except Exception as err:
@@ -309,6 +309,9 @@ def deleteReserve():
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
+
+# @app.route('/api/reserve', methods=['PUT'])
+# def updateCheckIn():
 
 @app.route('/api/multa', methods=['POST'])
 def addMulta():

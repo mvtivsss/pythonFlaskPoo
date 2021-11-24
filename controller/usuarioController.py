@@ -5,9 +5,9 @@ def getUsuarios():
         response = []
         usersList = [lista for lista in connector.callProcedure('spGetUsers')]
         for users in usersList:
-            response.append({'id':users[0],'firstName': users[1], 'lastNameP':users[2],'lastNameM': users[3],'dateOfBirth':users[4],
-            'mail':users[5],'phone':users[6],'pass':users[7],'idCommune':users[8],
-            'nameCommune': users[9],'idType':users[10],'nameType':users[11]})
+            response.append({'id':users[0], 'rut': users[1],'firstName': users[2], 'lastNameP':users[3],'lastNameM': users[4],'dateOfBirth':users[5],
+            'mail':users[6],'phone':users[7],'pass':users[8],'idCommune':users[9],
+            'nameCommune': users[10],'idType':users[11],'nameType':users[12]})
             print(response)
         return response
     except Exception as err:
@@ -24,9 +24,9 @@ def usuarioInit(nombre, rut, apPaterno, apMaterno, fNacimiento, mail, telefono, 
     except Exception as err:
         print('no se pudo agregar el/la usuario/a')
 
-def updateUser(id,nombre, apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo):
+def updateUser(id,rut,nombre, apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo):
     try:
-     connector.callProcedureParameters('spUpdateUser', [id,nombre, apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo])
+     connector.callProcedureParameters('spUpdateUser', [id,rut,nombre,apPaterno, apMaterno, fNacimiento, mail, telefono, contraseña, idComuna,tipo])
     #  connector.callExecute('COMMIT')
      print('ok update')
      return True

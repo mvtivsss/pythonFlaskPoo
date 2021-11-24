@@ -134,6 +134,7 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPGETUSERS(PUSER OUT SYS_REFCURSOR)
   BEGIN
     OPEN PUSER FOR
     SELECT "u".ID_USU,
+           "u".RUT_USU,
            "u".NOM_USU,
            "u".APP_USU,
            "u".APM_USU,
