@@ -1,3 +1,4 @@
+from logging import error
 from BD import configuracion as connector
 
 def getReservas():
@@ -16,7 +17,23 @@ def getReservas():
         print('Error en controller ', err)
     finally:
         return response
+
+def addReserva(checkInPlanificado,checkin,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId,funcionarioId):
+    try:
+        connector.callProcedureParameters('SPADDRESERVA',[checkInPlanificado,checkin,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId,funcionarioId])
+        print('ok Insert')
+        return True
+    except Exception as err:
+        print('error en controller', err)
     
+def deleteReserve(id):
+    try:
+        connector.callProcedureParameters('spDeleteReserva',[id])
+        print('ok delete')
+        return True
+    except Exception as err:
+        print(err)
+
 def addMulta(cant, subtotal, idActa, idReserva):
     try:
         connector.callProcedureParameters('SPADDMULTA',[cant, subtotal, idActa, idReserva])
