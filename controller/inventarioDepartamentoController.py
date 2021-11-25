@@ -30,3 +30,17 @@ def deleteInventoryDepartment(id):
      return True
     except Exception as err:
         print('error delete')
+
+
+def getInventoryDepartmentById(id):
+    try:
+        response = []
+        inventoriesList = [lista for lista in connector.callProcedureIdRefCursor('SPGETINVENTORYDEPARTMENTBYID',[id])]
+        for inventories in inventoriesList:
+            response.append({'id':inventories[0],'quantity': inventories[1], 'departmentId':inventories[2],'inventoryId': inventories[3],'objName':inventories[4]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Error en controller ', err)
+    finally:
+        return response

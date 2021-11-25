@@ -168,6 +168,15 @@ def addInventoryDepartment():
     except Exception as err:
         return print(err)
 
+@app.route('/api/inventoriesDepartmentById', methods=['GET'])
+def getInventoryDepartmentsById():
+    data = request.args['id']
+    inventario = [inventarioList for inventarioList in inventarioDepartamentoController.getInventoryDepartmentById(data)]
+    if (len(inventario)> 0):
+        return jsonify({'inventoriesDepartments':inventario })
+    else:
+        return jsonify({'inventoriesDepartments':[] })
+
 @app.route('/api/inventoriesDepartment', methods=['DELETE'])
 def deleteInventoryDepartment():
     try:
@@ -370,7 +379,6 @@ def getReservaServex():
             return jsonify({'services': []})
     except Exception as err:
         print(err)
-
 
 
 if __name__ == '__main__':
