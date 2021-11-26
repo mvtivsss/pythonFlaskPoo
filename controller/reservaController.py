@@ -75,3 +75,11 @@ def getReservaServex(id):
         print('Error en controller', err)
     finally:
         return response  
+
+def updateCheckIn(checkIn, id):
+    try:
+        connector.callProcedureParameters('spUpdateCheckIn',[checkIn, id])
+        print('update ok')
+        return True
+    except Exception as err:
+        print('no se pudo actualizar el check in '+ err)
