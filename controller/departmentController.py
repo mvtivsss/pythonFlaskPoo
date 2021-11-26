@@ -1,4 +1,6 @@
 from BD import configuracion as connector
+import base64
+from PIL import Image
 
 def getDepartments():
     try:
@@ -52,6 +54,8 @@ def addDepartment(nombre, direccion,habitaciones,
                   estacionamientos, banos, internet, cable,
                   calefaccion, amoblado, precio, estado, descripcion,comuna):
     try:
+    #  foto = Image.open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg')
+     
      connector.callProcedureParameters('spAddDepartment', [nombre, direccion,habitaciones,estacionamientos, banos, internet, cable,
                                                            calefaccion, amoblado, precio, estado, descripcion,comuna])
      print('ok insert')

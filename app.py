@@ -1,5 +1,7 @@
 from types import MethodType
+from PIL import Image
 from flask import Flask, json, jsonify, request
+import base64
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
 from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController, reservaController
@@ -103,10 +105,20 @@ def getDepartments():
 @app.route('/api/departments', methods=['POST'])
 def addDepartment():
     try:
+        # with open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg') as f:
         data = request.get_json()
+            # encoded = base64.b64decode(f.read()).decode()
+            
+            # f = Image.open('C:\Users\matim\Desktop\TurismoPy\images\python.jpg','rb') as f:
+            # image = open(data['departmentPhoto'],'rb')
+            # image_read = image.read()
+            # image64encoded = base64.decodebytes(image_read)
+        data1 = open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg')
+        # photo = base64.b64encode(data.read())
+
         departmentController.addDepartment(data['name'], data['address'],data['totalRooms'], data['totalParking'],data['totalBaths'],
-              data['internet'],data['tv'],data['heating'],data['furnished'],data['departmentPrice'],
-              data['departmentStatus'],data['departmentDesc'],data["idCommune"])
+            data['internet'],data['tv'],data['heating'],data['furnished'],data['departmentPrice'],
+            data['departmentStatus'],data['departmentDesc'],data["idCommune"])
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
@@ -155,6 +167,15 @@ def addInventoryDepartment():
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
+
+@app.route('/api/inventoriesDepartmentById', methods=['GET'])
+def getInventoryDepartmentsById():
+    data = request.args['id']
+    inventario = [inventarioList for inventarioList in inventarioDepartamentoController.getInventoryDepartmentById(data)]
+    if (len(inventario)> 0):
+        return jsonify({'inventoriesDepartments':inventario })
+    else:
+        return jsonify({'inventoriesDepartments':[] })
 
 @app.route('/api/inventoriesDepartment', methods=['DELETE'])
 def deleteInventoryDepartment():
@@ -222,9 +243,9 @@ def getMaintainsDepartments():
 
 @app.route('/api/maintainsDepartmentsById',methods=['GET'])
 def getMaintainsDepartmentsById():
-    data = request.get_json()
+    data = request.args['id']
     print(data)
-    maintains = [maintainsList for maintainsList in maintainsDepartmentController.getMaintainDepartmentById(data['id'])]
+    maintains = [maintainsList for maintainsList in maintainsDepartmentController.getMaintainDepartmentById(data)]
     # print(data)
     if (len(maintains)> 0):
         return jsonify({'maintainsDepartments':maintains })
@@ -254,8 +275,8 @@ def validateLogin():
 
 @app.route('/api/departmentById', methods=['GET'])
 def getDepartmentById():
-    data = request.get_json()
-    department = [departmentList for departmentList in departmentController.getDepartmentById(data['id'])]
+    data = request.args['id']
+    department = [departmentList for departmentList in departmentController.getDepartmentById(data)]
     print(department)
     if (len(department) > 0):
         return jsonify({'department': department})
@@ -264,8 +285,8 @@ def getDepartmentById():
 
 @app.route('/api/departmentByDisponibility', methods=['GET'])
 def getDepartmentByDisponibility():
-    data = request.get_json()
-    department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(data['disponibility'])]
+    data = request.args['disponibility']
+    department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(data)]
     print(department)
     if(len(department) > 0):
         return jsonify({'departments': department})
@@ -358,7 +379,6 @@ def getReservaServex():
             return jsonify({'services': []})
     except Exception as err:
         print(err)
-
 
 
 if __name__ == '__main__':

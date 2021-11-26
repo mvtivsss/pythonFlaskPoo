@@ -2,7 +2,7 @@
 # Luego los archivos .dll copiarlos y pegarlos en la carpeta donde tenemos almacenado python
 # C:\Python39 en mi caso.
 import cx_Oracle as conn
-
+import base64
 
 
 def callProcedure(procedureName):
@@ -83,7 +83,7 @@ def callExecute(query,parameters):
         try:
             cursor = con.cursor()
             refCursor = con.cursor()
-
+            
             cursor.execute(query,parameters)
             cursor.executemany(query, parameters)
             print('ok insert')
@@ -96,7 +96,26 @@ def callExecute(query,parameters):
     finally:
         con.close()
         return lista
-# def callProcedureINSERT():
+
+
+def callProcedureParameters(procedureName,parameters):
+    lista = []
+    try:
+        con = conn.connect('turismo/turismo@localhost:1521')
+    except Exception as err:
+        print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
+    else:
+        try:
+            cursor = con.cursor()
+            cursor.callproc(procedureName,parameters)
+            # myvar = cursor.var(conn.NUMBER)
+        except Exception as err:
+            print('Error ocasionado en el procedimiento almacenado.', err)
+        finally:
+            cursor.close()
+    finally:
+        con.close()
+        return lista
 
 
 # Comando para corroborar la conexión y la version a base de datos.
