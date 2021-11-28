@@ -331,8 +331,14 @@ def deleteReserve():
     except Exception as err:
         return print(err)
 
-# @app.route('/api/reserve', methods=['PUT'])
-# def updateCheckIn():
+@app.route('/api/checkInReserve', methods=['PUT'])
+def updateCheckIn():
+    try:
+        data = request.get_json()
+        reservaController.updateCheckIn(data['checkIn'], data['reserveId'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return print(err)
 
 @app.route('/api/multa', methods=['POST'])
 def addMulta():
