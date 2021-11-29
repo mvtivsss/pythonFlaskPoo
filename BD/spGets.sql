@@ -39,19 +39,20 @@ CREATE OR REPLACE PROCEDURE TURISMO.SPGETDEPARTMENTBYDISPONIBILITY(DISPONIBILITY
   AS
   BEGIN
     OPEN CUR FOR
-    SELECT "d".ID_DEPTO,
-           "d".NOM_DEPTO,
-           "d".DIRECCION_DEPTO,
-           "d".CANT_HABITACIONES,
-           "d".CANT_ESTACIONAMIENTOS,
-           "d".CANT_BANOS,
-           "d".INTERNET,
-           "d".CABLE,
-           "d".CALEFACCION,
-           "d".AMOBLADO,
-           "d".PRECIO_DEPTO,
-           "d".ESTADO_DEPTO,
-           "r".NOMBRE_REGION || ', ' || "c1".NOMBRE_CIUDAD || ', ' || "c".NOMBRE_COMUNA AS UBICACION
+    SELECT "d".ID_DEPTO,--0
+           "d".NOM_DEPTO,--1
+           "d".DIRECCION_DEPTO,--2
+           "d".CANT_HABITACIONES,--3
+           "d".CANT_ESTACIONAMIENTOS,--4
+           "d".CANT_BANOS,--5
+           "d".INTERNET,--6
+           "d".CABLE,--7
+           "d".CALEFACCION,--8
+           "d".AMOBLADO,--9
+           "d".PRECIO_DEPTO,--10
+           "d".ESTADO_DEPTO,--11
+           "r".NOMBRE_REGION || ', ' || "c1".NOMBRE_CIUDAD || ', ' || "c".NOMBRE_COMUNA AS UBICACION, --12
+           "d".DESCRIPCION_DEPTO --13
       FROM DEPARTAMENTO "d"
         JOIN COMUNA "c"
           ON "d".COMUNA_ID_COMUNA = "c".ID_COMUNA
