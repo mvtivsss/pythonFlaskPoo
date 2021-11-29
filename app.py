@@ -404,6 +404,5 @@ def deleteReservaServex():
     except Exception as err:
         return jsonify({'message':'no se pudo eliminar la reserva'})
 
-
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug = True, port = 4000)
