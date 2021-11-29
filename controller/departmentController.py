@@ -1,6 +1,5 @@
 from BD import configuracion as connector
 import base64
-from PIL import Image
 
 def getDepartments():
     try:

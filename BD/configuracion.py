@@ -8,7 +8,7 @@ import base64
 def callProcedure(procedureName):
     lista = []
     try:
-        con = conn.connect('turismo/turismo@localhost:1521')
+        con = conn.connect('turismo/turismo@dbOracle:1521/XE')
     except Exception as err:
         print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
     else:
@@ -32,7 +32,7 @@ def callProcedure(procedureName):
 def callProcedureParameters(procedureName,parameters):
     lista = []
     try:
-        con = conn.connect('turismo/turismo@localhost:1521')
+        con = conn.connect('turismo/turismo@dbOracle:1521/XE')
     except Exception as err:
         print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
     else:
@@ -51,7 +51,7 @@ def callProcedureParameters(procedureName,parameters):
 def callProcedureIdRefCursor(procedureName,parameters):
     lista = []
     try:
-        con = conn.connect('turismo/turismo@localhost:1521')
+        con = conn.connect('turismo/turismo@dbOracle:1521/XE')
     except Exception as err:
         print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
     else:
@@ -73,51 +73,7 @@ def callProcedureIdRefCursor(procedureName,parameters):
         con.close()
         return lista
 
-def callExecute(query,parameters):
-    lista = []
-    try:
-        con = conn.connect('turismo/turismo@localhost:1521')
-    except Exception as err:
-        print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
-    else:
-        try:
-            cursor = con.cursor()
-            refCursor = con.cursor()
-            
-            cursor.execute(query,parameters)
-            cursor.executemany(query, parameters)
-            print('ok insert')
-            return True
-        except Exception as err:
-            print('Error ocasionado en el procedimiento almacenado.', err)
-        finally:
-            cursor.close()
-            refCursor.close()
-    finally:
-        con.close()
-        return lista
-
-
-def callProcedureParameters(procedureName,parameters):
-    lista = []
-    try:
-        con = conn.connect('turismo/turismo@localhost:1521')
-    except Exception as err:
-        print('Excepcion ocurrio en la creacion de la conexion a base de datos.')
-    else:
-        try:
-            cursor = con.cursor()
-            cursor.callproc(procedureName,parameters)
-            # myvar = cursor.var(conn.NUMBER)
-        except Exception as err:
-            print('Error ocasionado en el procedimiento almacenado.', err)
-        finally:
-            cursor.close()
-    finally:
-        con.close()
-        return lista
-
 
 # Comando para corroborar la conexión y la version a base de datos.
-# con = conn.connect('turismo/turismo@localhost:1521')
+# con = conn.connect('turismo/turismo@dbOracle:1521/XE')
 # print("Database version:", con.version)
