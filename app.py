@@ -50,7 +50,8 @@ def getCiudad():
 
 @app.route('/api/serviciosExtra', methods=['GET'])
 def getServExtra():
-    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
+    data = request.get_json()
+    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra(data['id'])]
     # print(servicios)
     if servicios:
         return jsonify({'servicios': servicios})

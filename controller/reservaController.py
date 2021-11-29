@@ -70,7 +70,6 @@ def updateCheckIn(checkIn, id):
         return True
     except Exception as err:
         print('no se pudo actualizar el check in '+ err)
-
         
 def getReservaServex(id):
     try:
