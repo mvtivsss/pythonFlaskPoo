@@ -1,5 +1,4 @@
 from types import MethodType
-from PIL import Image
 from flask import Flask, json, jsonify, request
 import base64
 from controller import regionController as region, servicioExtraController as servicioExtra
@@ -51,7 +50,8 @@ def getCiudad():
 
 @app.route('/api/serviciosExtra', methods=['GET'])
 def getServExtra():
-    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
+    data = request.get_json()
+    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra(data['id'])]
     # print(servicios)
     if servicios:
         return jsonify({'servicios': servicios})
@@ -377,7 +377,7 @@ def getMulta():
 def getReservaServex():
     try:
         data = request.get_json()
-        reservaServex = [reservaServexList for reservaServexList in reservaController.getReservaServex(data['idReserve'])]
+        reservaServex = [reservaServexList for reservaServexList in reservaController.getReservaServex(data['id'])]
         print(reservaServex)
         if(len(reservaServex)> 0):
             return jsonify({'services': reservaServex})
@@ -385,6 +385,34 @@ def getReservaServex():
             return jsonify({'services': []})
     except Exception as err:
         print(err)
+
+# @app.route('/api/reserveServex', methods=['POST'])
+# def addReservaServex():
+#     try:
+#         data = request.get_json()
+#         servicioExtra.addReservaServex(data['cantidad'],data['subtotal'],data['serv_id'],data['reserv_id'])
+#         return jsonify({'ok': True})
+#     except Exception as err:
+#         return jsonify({'ok': err})
+
+# @app.route('/api/reserveServex', methods=['DELETE'])
+# def deleteReservaServex():
+#     try:
+#         data = request.get_json()
+#         servicioExtra.deleteReservaServex(data['id'])
+#         return jsonify({'ok': True})
+#     except Exception as err:
+#         return jsonify({'message':'no se pudo eliminar la reserva'})
+
+# @app.route('/api/reserveByUser')
+# def getReservaByUser():
+#     try:
+#         data = request.args['id']
+#         reserveByUser = [lista for lista in reservaController.getReservaByUser(data)]
+#         if len(reserveByUser) > 0:
+#             return jsonify({'reserve': reserveByUser})
+#         else: 
+#             return jsonify
 
 
 if __name__ == '__main__':

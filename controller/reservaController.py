@@ -63,6 +63,14 @@ def getMulta(id):
     finally:
         return response  
 
+def updateCheckIn(checkIn, id):
+    try:
+        connector.callProcedureParameters('spUpdateCheckIn',[checkIn, id])
+        print('update ok')
+        return True
+    except Exception as err:
+        print('no se pudo actualizar el check in '+ err)
+        
 def getReservaServex(id):
     try:
         response = []
@@ -75,11 +83,20 @@ def getReservaServex(id):
         print('Error en controller', err)
     finally:
         return response  
-
-def updateCheckIn(checkIn, id):
+# gets RESERVA_ID_RESERVA,CANTIDAD_SERVEX,SUBTOTAL_SERVEX,SERVICIO_EXTRA_ID_SERV
+def addReservaServex(cantidad,subtotal,serv_id,reserv_id):
     try:
-        connector.callProcedureParameters('spUpdateCheckIn',[checkIn, id])
-        print('update ok')
-        return True
+     connector.callProcedureParameters('spAddReservaServex', [cantidad,subtotal,serv_id,reserv_id])
+     print('ok insert')
+     return True
     except Exception as err:
-        print('no se pudo actualizar el check in '+ err)
+        print('no se pudo agregar el servicio extra' , err)
+
+def deleteReservaServex(id):
+    try:
+     connector.callProcedureParameters('spDeleteReservaServex', [id])
+     print('ok delete')
+     return True
+    except Exception as err:
+        print('no se pudo eliminar el servicio extra' , err)
+
