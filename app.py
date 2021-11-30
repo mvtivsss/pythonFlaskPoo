@@ -3,7 +3,7 @@ from flask import Flask, json, jsonify, request
 import base64
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
-from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController, reservaController
+from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController, reservaController, transportController
 app = Flask(__name__)
 
 @app.route('/')
@@ -386,23 +386,23 @@ def getReservaServex():
     except Exception as err:
         print(err)
 
-# @app.route('/api/reserveServex', methods=['POST'])
-# def addReservaServex():
-#     try:
-#         data = request.get_json()
-#         servicioExtra.addReservaServex(data['cantidad'],data['subtotal'],data['serv_id'],data['reserv_id'])
-#         return jsonify({'ok': True})
-#     except Exception as err:
-#         return jsonify({'ok': err})
+@app.route('/api/reserveServex', methods=['POST'])
+def addReservaServex():
+    try:
+        data = request.get_json()
+        servicioExtra.addReservaServex(data['cantidad'],data['subtotal'],data['serv_id'],data['reserv_id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'ok': err})
 
-# @app.route('/api/reserveServex', methods=['DELETE'])
-# def deleteReservaServex():
-#     try:
-#         data = request.get_json()
-#         servicioExtra.deleteReservaServex(data['id'])
-#         return jsonify({'ok': True})
-#     except Exception as err:
-#         return jsonify({'message':'no se pudo eliminar la reserva'})
+@app.route('/api/reserveServex', methods=['DELETE'])
+def deleteReservaServex():
+    try:
+        data = request.get_json()
+        servicioExtra.deleteReservaServex(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'message':'no se pudo eliminar la reserva'})
 
 # @app.route('/api/reserveByUser')
 # def getReservaByUser():
@@ -413,6 +413,45 @@ def getReservaServex():
 #             return jsonify({'reserve': reserveByUser})
 #         else: 
 #             return jsonify
+
+@app.route('/api/transport', methods=['GET'])
+def getTransports():
+    transport = [transports for transports in transportController.getTransports()]
+    print(transport)
+    if(len(transport) > 0):
+        return jsonify({'transports': transport})
+    else:
+        return jsonify({'transports': []})
+
+
+@app.route('/api/transport', methods=['POST'])
+def addTransports():
+    try:
+        data = request.get_json()
+        transportController.addTransport(data['idReserve'],data['vehicle'], 
+        data['tripStart'],data['tripEnd'],data['time'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'ok': err})
+
+@app.route('/api/transport', methods=['PUT'])
+def updateTransport():
+    try:
+        data = request.get_json()
+        transportController.updateTransport(data['id'],data['idReserve']
+        ,data['vehicle'],data['tripStart'],data['tripEnd'],data['time'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return
+
+@app.route('/api/transport', methods=['DELETE'])
+def deleteTransport():
+    try:
+        data = request.get_json()
+        transportController.deleteTransport(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'message':'no se pudo eliminar el transporte'})
 
 
 if __name__ == '__main__':
