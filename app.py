@@ -48,43 +48,6 @@ def getCiudad():
     else:
         return jsonify({"cities":[]})
 
-@app.route('/api/serviciosExtra', methods=['GET'])
-def getServExtra():
-    data = request.get_json()
-    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra(data['id'])]
-    # print(servicios)
-    if servicios:
-        return jsonify({'servicios': servicios})
-    else:
-        return jsonify({"servicios":[]})
-
-@app.route('/api/serviciosExtra', methods=['POST'])
-def addServExtra():
-    try:
-        data = request.get_json()
-        servicioExtra.addServExtra(data['description'], data['price'])
-        return jsonify({'ok': True})
-    except Exception as err:
-        return jsonify({'ok': err})
-
-@app.route('/api/serviciosExtra', methods=['PUT'])
-def updateServExtra():
-    try:
-        data = request.get_json()
-        servicioExtra.updateServExtra(data['id'], data['description'], data['price'])
-        return jsonify({'ok': True})
-    except Exception as err:
-        return
-
-@app.route('/api/serviciosExtra', methods=['DELETE'])
-def deleteServExtra():
-    try:
-        data = request.get_json()
-        servicioExtra.deleteServExtra(data['id'])
-        return jsonify({'ok': True})
-    except Exception as err:
-        return jsonify({'message':'no se pudo eliminar el servicio extra'})
-
 @app.route('/api/acta')
 def getActa():
     actas = [listaActa for listaActa in actaController.getActa()]
@@ -404,6 +367,16 @@ def deleteReservaServex():
     except Exception as err:
         return jsonify({'message':'no se pudo eliminar la reserva'})
 
+
+@app.route('/api/extraServices', methods=['GET'])
+def getServExtra():
+    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
+    # print(servicios)
+    if servicios:
+        return jsonify({'servicios': servicios})
+    else:
+        return jsonify({"servicios":[]})
+        
 # @app.route('/api/reserveByUser')
 # def getReservaByUser():
 #     try:

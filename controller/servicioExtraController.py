@@ -13,28 +13,3 @@ def getServExtra():
         print('Excepcion con el controlador.',ex)
     finally:
         return response
-
-def addServExtra(descripcion,precio):
-    try:
-     connector.callProcedureParameters('spAddServExtra', [descripcion,precio])
-     print('ok insert')
-     return True
-    except Exception as err:
-        print('no se pudo agregar el servicio extra' , err)
-
-def updateServExtra(id,descripcion,precio):
-    try:
-     connector.callProcedureParameters('spUpdateServExtra', [id,descripcion,precio])
-     print('ok update')
-     return True
-    except Exception as err:
-        print('no se pudo actualizar el servicio extra' , err)
-
-
-def deleteServExtra(id):
-    try:
-     connector.callProcedureParameters('spDeleteServExtra', [id])
-     print('ok delete')
-     return True
-    except Exception as err:
-        print('no se pudo eliminar el servicio extra' , err)
