@@ -15,9 +15,9 @@ def getTransports():
     finally:
         return response
 
-def addTransport(idReserve,vehicle,tripStart,tripEnd,time):
+def addTransport(place,time,vehicle,idReserve,idWorker):
     try:
-     connector.callProcedureParameters('spAddTransport', [idReserve,vehicle,tripStart,tripEnd,time])
+     connector.callProcedureParameters('spAddTransport', [place,time,vehicle,idReserve,idWorker])
      print('ok insert')
      return True
     except Exception as err:
