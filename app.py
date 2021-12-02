@@ -410,8 +410,8 @@ def addTransports():
 def updateTransport():
     try:
         data = request.get_json()
-        transportController.updateTransport(data['id'],data['idReserve']
-        ,data['vehicle'],data['tripStart'],data['tripEnd'],data['time'])
+        transportController.updateTransport(data['id'],data['place']
+        ,data['time'],data['vehicle'],data['idReserve'],data['idWorker'])
         return jsonify({'ok': True})
     except Exception as err:
         return

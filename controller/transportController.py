@@ -23,9 +23,9 @@ def addTransport(place,time,vehicle,idReserve,idWorker):
     except Exception as err:
         print('no se pudo agregar el transporte ' , err)
 
-def updateTransport(id,idReserve,vehicle,tripStart,tripEnd,time):
+def updateTransport(id,place,time,vehicle,idReserve,idWorker):
     try:
-        connector.callProcedureParameters('spUpdateTransport', [id,idReserve,vehicle,tripStart,tripEnd,time])
+        connector.callProcedureParameters('spUpdateTransport', [id,place,time,vehicle,idReserve,idWorker])
         print('ok insert')
         return True
     except Exception as err:
