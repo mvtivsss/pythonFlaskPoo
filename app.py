@@ -339,8 +339,7 @@ def getMulta():
 @app.route('/api/reserveServex', methods=['GET'])
 def getReservaServex():
     try:
-        data = request.get_json()
-        reservaServex = [reservaServexList for reservaServexList in reservaController.getReservaServex(data['id'])]
+        reservaServex = [reservaServexList for reservaServexList in reservaController.getReservaServex(request.args['id'])]
         print(reservaServex)
         if(len(reservaServex)> 0):
             return jsonify({'services': reservaServex})
@@ -353,7 +352,7 @@ def getReservaServex():
 def addReservaServex():
     try:
         data = request.get_json()
-        servicioExtra.addReservaServex(data['cantidad'],data['subtotal'],data['serv_id'],data['reserv_id'])
+        reservaController.addReservaServex(data['cantidad'],data['subtotal'],data['serv_id'],data['reserv_id'])
         return jsonify({'ok': True})
     except Exception as err:
         return jsonify({'ok': err})
@@ -362,7 +361,7 @@ def addReservaServex():
 def deleteReservaServex():
     try:
         data = request.get_json()
-        servicioExtra.deleteReservaServex(data['id'])
+        reservaController.deleteReservaServex(data['id'])
         return jsonify({'ok': True})
     except Exception as err:
         return jsonify({'message':'no se pudo eliminar la reserva'})

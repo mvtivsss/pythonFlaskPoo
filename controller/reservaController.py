@@ -76,7 +76,8 @@ def getReservaServex(id):
         response = []
         reservaServexList = [lista for lista in connector.callProcedureIdRefCursor('spGetReservaServex',[id])]
         for reservaServex in reservaServexList:
-            response.append({'id': reservaServex[0], 'quantity': reservaServex[1], 'subTotal' : reservaServex[2], 'idServEx': reservaServex[3], 'idReserve': reservaServex[4]})
+            response.append({'id': reservaServex[0], 'quantity': reservaServex[1], 'subTotal' : reservaServex[2], 
+            'idServEx': reservaServex[3], 'idReserve': reservaServex[4], 'desc_serv': reservaServex[5]})
             print(response)
         return response
     except Exception as err:
