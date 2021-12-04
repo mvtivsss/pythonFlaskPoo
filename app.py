@@ -248,8 +248,7 @@ def getDepartmentById():
 
 @app.route('/api/departmentByDisponibility', methods=['GET'])
 def getDepartmentByDisponibility():
-    data = request.args['disponibility']
-    department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(data)]
+    department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(1)]#request.args['disponibility']
     print(department)
     if(len(department) > 0):
         return jsonify({'departments': department})
