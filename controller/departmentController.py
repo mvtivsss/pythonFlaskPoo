@@ -1,5 +1,9 @@
 from BD import configuracion as connector
-import base64
+from base64 import b64encode, b64decode
+import random
+from  os import path, makedirs
+import pathlib
+import uuid
 
 def getDepartments():
     try:
@@ -48,19 +52,39 @@ def getDepartmentByDisponibility(disponibility):
         return response
 
 
-
+# gets base64, decode its and save its as a image in a folder by the department id
 def addDepartment(nombre, direccion,habitaciones,
                   estacionamientos, banos, internet, cable,
-                  calefaccion, amoblado, precio, estado, descripcion,comuna):
+                  calefaccion, amoblado, precio, estado, descripcion,comuna, imgB64): #
     try:
-    #  foto = Image.open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg')
+     parentPath =  str(pathlib.Path().resolve())
+     leafPath = '/resources/deptoImages'
+     imagePath = parentPath + leafPath
+
+     if (path.isdir(imagePath) == False):
+         makedirs(imagePath)
+     
+     randomID = uuid.uuid4().hex
+
+     deptoPicName = 'depto'
+     
+     namePath = deptoPicName + randomID + '.png'
+
+     imgPath = imagePath + '/' + namePath
+
+     with open(imgPath, "wb") as fh:
+         fh.write(b64decode(imgB64))
+     
+     
      
      connector.callProcedureParameters('spAddDepartment', [nombre, direccion,habitaciones,estacionamientos, banos, internet, cable,
-                                                           calefaccion, amoblado, precio, estado, descripcion,comuna])
+                                                           calefaccion, amoblado, precio, estado, descripcion,comuna,imgPath])
      print('ok insert')
+     print(str(imgPath))
      return True
     except Exception as err:
         print('no se pudo agregar la Department')
+        return False
 
 def updateDepartment(id,nombre, direccion,habitaciones,
                   estacionamientos, banos, internet, cable,

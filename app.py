@@ -1,5 +1,6 @@
 from types import MethodType
 from flask import Flask, json, jsonify, request
+from base64 import b64encode, b64decode
 import base64
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
@@ -59,6 +60,7 @@ def getActa():
 
 @app.route('/api/departments', methods=['GET'])
 def getDepartments():
+    print('test////////////////////////////')
     departamentos = [departmentList for departmentList in departmentController.getDepartments()]
     if (len(departamentos)> 0):
         return jsonify({'departments':departamentos })
@@ -68,23 +70,27 @@ def getDepartments():
 @app.route('/api/departments', methods=['POST'])
 def addDepartment():
     try:
-        # with open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg') as f:
-        data = request.get_json()
-            # encoded = base64.b64decode(f.read()).decode()
-            
-            # f = Image.open('C:\Users\matim\Desktop\TurismoPy\images\python.jpg','rb') as f:
-            # image = open(data['departmentPhoto'],'rb')
-            # image_read = image.read()
-            # image64encoded = base64.decodebytes(image_read)
-        data1 = open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg')
-        # photo = base64.b64encode(data.read())
 
-        departmentController.addDepartment(data['name'], data['address'],data['totalRooms'], data['totalParking'],data['totalBaths'],
-            data['internet'],data['tv'],data['heating'],data['furnished'],data['departmentPrice'],
-            data['departmentStatus'],data['departmentDesc'],data["idCommune"])
+        data = request.get_json()
+        departmentController.addDepartment(data['name']
+        ,data['address']
+        ,data['totalRooms']
+        ,data['totalParking']
+        ,data['totalBaths']
+        ,data['internet']
+        ,data['tv']
+        ,data['heating']
+        ,data['furnished']
+        ,data['departmentPrice']
+        ,data['departmentStatus']
+        ,data['departmentDesc']
+        ,data['idCommune']
+        ,data['imgB64'])
+        
         return jsonify({'ok': True})
     except Exception as err:
-        return print(err)
+        # return print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/departments', methods=['PUT'])
 def updateDepartment():
@@ -423,7 +429,6 @@ def deleteTransport():
         return jsonify({'ok': True})
     except Exception as err:
         return jsonify({'message':'no se pudo eliminar el transporte'})
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug = True, port = 4000)
