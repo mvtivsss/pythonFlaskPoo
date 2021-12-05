@@ -76,7 +76,6 @@ def addDepartment(nombre, direccion,habitaciones,
          fh.write(b64decode(imgB64))
      
      
-     
      connector.callProcedureParameters('spAddDepartment', [nombre, direccion,habitaciones,estacionamientos, banos, internet, cable,
                                                            calefaccion, amoblado, precio, estado, descripcion,comuna,imgPath])
      print('ok insert')

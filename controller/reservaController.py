@@ -18,9 +18,9 @@ def getReservas():
     finally:
         return response
 
-def addReserva(checkInPlanificado,checkin,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId,funcionarioId):
+def addReserva(checkInPlanificado,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId):
     try:
-        connector.callProcedureParameters('SPADDRESERVA',[checkInPlanificado,checkin,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId,funcionarioId])
+        connector.callProcedureParameters('SPADDRESERVA',[checkInPlanificado,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId])
         print('ok Insert')
         return True
     except Exception as err:

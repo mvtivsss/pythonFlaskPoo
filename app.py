@@ -283,9 +283,9 @@ def getReserve():
 def addReserve():
     try:
         data = request.get_json()
-        reservaController.addReserva(data['checkInPlanning'],data['checkIn'], data['checkOut'],data['totalDays'],
+        reservaController.addReserva(data['checkInPlanning'],data['checkOut'],data['totalDays'],
                                      data['totalAdults'], data['totalKids'], data['totalBabies'],data['totalReserve'],
-                                     data['statusReserve'], data['departmentId'],data['clientId'], data['workerId'])
+                                     data['statusReserve'], data['departmentId'],data['clientId'])
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
