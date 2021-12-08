@@ -70,7 +70,7 @@ def getDepartments():
 @app.route('/api/departments', methods=['POST'])
 def addDepartment():
     try:
-
+        print('I work?')
         data = request.get_json()
         departmentController.addDepartment(data['name']
         ,data['address']
@@ -89,7 +89,7 @@ def addDepartment():
         
         return jsonify({'ok': True})
     except Exception as err:
-        # return print(err)
+        print(err)
         return jsonify({'ok': False})
 
 @app.route('/api/departments', methods=['PUT'])
@@ -331,8 +331,7 @@ def deleteMulta():
 @app.route('/api/multa', methods=['GET'])
 def getMulta():
     try:
-        data = request.get_json()
-        multa = [multaList for multaList in reservaController.getMulta(data['idReserve'])]
+        multa = [multaList for multaList in reservaController.getMulta(request.args['id'])]
         print(multa)
         if(len(multa)> 0):
             return jsonify({'fines': multa})

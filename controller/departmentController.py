@@ -10,12 +10,13 @@ def getDepartments():
         response = []
         departmentsList = [lista for lista in connector.callProcedure('spGetDepartments')]
         for departments in departmentsList:
-            b4Image = b64encode(departments[15])
+            with open(departments[15], 'rb') as f:
+                imgContents = f.read()
+            b4Image = str(b64encode(imgContents))
             response.append({'id':departments[0],'name': departments[1], 'address':departments[2],'totalRooms':departments[3], 'totalParking': departments[4],
                              'totalBaths': departments[5], 'internet':departments[6], 'tv': departments[7],'heating':departments[8], 'furnished': departments[9],
                              'departmentPrice': departments[10], 'departmentStatus': departments[11],'departmentDesc':departments[12], 'idCommune':departments[13],
-                             'nameCommune': departments[14], 'IMG_PATH':b4Image})
-            print(response)
+                             'nameCommune': departments[14], 'imgB64':b4Image})
         return response
     except Exception as err:
         print('Error en controller ', err)
@@ -27,11 +28,13 @@ def getDepartmentById(id):
         response = []
         departmentByIdList = connector.callProcedureIdRefCursor('SPGETDEPARTMENTBYID',[id])
         for department in departmentByIdList:
-            b4Image = b64encode(department[14])
+            with open(department[14], 'rb') as f:
+                imgContents = f.read()
+            b4Image = str(b64encode(imgContents))
             response.append({'id':department [0],'name': department [1], 'address':department [2],'totalRooms':department [3], 'totalParking': department [4],
                              'totalBaths': department [5], 'internet':department [6], 'tv': department [7],'heating':department [8], 'furnished': department [9],
                              'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description':department [13]
-                             ,'IMG_PATH':b4Image})
+                             ,'imgB64':b4Image})
             print(response)
         return response
     except Exception as err:
@@ -44,7 +47,9 @@ def getDepartmentByDisponibility(disponibility):
         response = []
         departmentByIdList = connector.callProcedureIdRefCursor('SPGETDEPARTMENTBYDISPONIBILITY',[disponibility])
         for department in departmentByIdList:
-            b4Image = b64encode(department[14])
+            with open(department[14], 'rb') as f:
+                imgContents = f.read()
+            b4Image = str(b64encode(imgContents))
             response.append({'id':department [0],'name': department [1], 'address':department [2],'totalRooms':department [3], 'totalParking': department [4],
                              'totalBaths': department [5], 'internet':department [6], 'tv': department [7],'heating':department [8], 'furnished': department [9],
                              'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description' : department[13]
@@ -61,7 +66,9 @@ def getDepartmentByDisponibility(disponibility):
 def addDepartment(nombre, direccion,habitaciones,
                   estacionamientos, banos, internet, cable,
                   calefaccion, amoblado, precio, estado, descripcion,comuna, imgB64): #
+    print('I work 2?')
     try:
+     print('I work 3?, id is: ')
      parentPath =  str(pathlib.Path().resolve())
      leafPath = '/resources/deptoImages'
      imagePath = parentPath + leafPath
@@ -79,8 +86,6 @@ def addDepartment(nombre, direccion,habitaciones,
 
      with open(imgPath, "wb") as fh:
          fh.write(b64decode(imgB64))
-     
-     
      connector.callProcedureParameters('spAddDepartment', [nombre, direccion,habitaciones,estacionamientos, banos, internet, cable,
                                                            calefaccion, amoblado, precio, estado, descripcion,comuna,imgPath])
      print('ok insert')
