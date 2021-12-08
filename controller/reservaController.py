@@ -100,4 +100,3 @@ def deleteReservaServex(id):
      return True
     except Exception as err:
         print('no se pudo eliminar el servicio extra' , err)
-

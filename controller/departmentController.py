@@ -13,7 +13,7 @@ def getDepartments():
             response.append({'id':departments[0],'name': departments[1], 'address':departments[2],'totalRooms':departments[3], 'totalParking': departments[4],
                              'totalBaths': departments[5], 'internet':departments[6], 'tv': departments[7],'heating':departments[8], 'furnished': departments[9],
                              'departmentPrice': departments[10], 'departmentStatus': departments[11],'departmentDesc':departments[12], 'idCommune':departments[13],
-                             'nameCommune': departments[14]})
+                             'nameCommune': departments[14], 'IMG_PATH':departments[15]})
             print(response)
         return response
     except Exception as err:
@@ -28,7 +28,8 @@ def getDepartmentById(id):
         for department in departmentByIdList:
             response.append({'id':department [0],'name': department [1], 'address':department [2],'totalRooms':department [3], 'totalParking': department [4],
                              'totalBaths': department [5], 'internet':department [6], 'tv': department [7],'heating':department [8], 'furnished': department [9],
-                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description':department [13]})
+                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description':department [13]
+                             ,'IMG_PATH':department[14]})
             print(response)
         return response
     except Exception as err:
@@ -43,7 +44,8 @@ def getDepartmentByDisponibility(disponibility):
         for department in departmentByIdList:
             response.append({'id':department [0],'name': department [1], 'address':department [2],'totalRooms':department [3], 'totalParking': department [4],
                              'totalBaths': department [5], 'internet':department [6], 'tv': department [7],'heating':department [8], 'furnished': department [9],
-                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description' : department[13]})
+                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description' : department[13]
+                             ,'IMG_PATH':department[14]})
             print(response)
         return response
     except Exception as err:
