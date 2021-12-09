@@ -331,7 +331,8 @@ def deleteMulta():
 @app.route('/api/multa', methods=['GET'])
 def getMulta():
     try:
-        multa = [multaList for multaList in reservaController.getMulta(request.args['id'])]
+        data = request.args["id"]
+        multa = [multaList for multaList in reservaController.getMulta(data)]
         print(multa)
         if(len(multa)> 0):
             return jsonify({'fines': multa})
@@ -428,6 +429,29 @@ def deleteTransport():
         return jsonify({'ok': True})
     except Exception as err:
         return jsonify({'message':'no se pudo eliminar el transporte'})
+
+@app.route('/api/getReservaByUser')
+def getReservaByUser():
+    data = request.args['id']
+    reserva = [lista for lista in reservaController.getReservaByUser(data)]
+    print(reserva)
+    if(len(reserva) > 0):
+        return jsonify({"reserve" : reserva})
+    else:
+        return jsonify({"reserve" : []})
+
+@app.route('/api/getCheckout')
+def getCheckout():
+    try:
+        data = request.args["id"]
+        reserva = [reservaList for reservaList in reservaController.getReservaById(data)]
+        acta = [actalist for actalist in reservaController.getMulta(data)]
+        servex = [servexList for servexList in reservaController.getReservaServex(data)]
+        print(acta)
+
+        return jsonify({'reserve': reserva, 'fines' : acta, 'servex' : servex})
+    except Exception as err:
+        print(err)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug = True, port = 4000)

@@ -100,3 +100,29 @@ def deleteReservaServex(id):
      return True
     except Exception as err:
         print('no se pudo eliminar el servicio extra' , err)
+
+def getReservaByUser(id):
+    try:
+        response = []
+        reservaList = [lista for lista in connector.callProcedureIdRefCursor('SPGETRESERVABYUSER', [id])]
+        for reserva in reservaList:
+            response.append({"id": reserva[0], "departmentName" : reserva[1], "communeName" : reserva[2], "departmentAddress" : reserva[3]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Error en controller' + err)
+    finally:
+        return response
+
+def getReservaById(id):
+    try:
+        response = []
+        reservaList = [lista for lista in connector.callProcedureIdRefCursor('SPGETRESERVABYID', [id])]
+        for reserva in reservaList:
+            response.append({"id": reserva[0], "totalReserve" : reserva[1], "checkIn" : reserva[2], "checkOut" : reserva[3]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Error en controller' + err)
+    finally:
+        return response
