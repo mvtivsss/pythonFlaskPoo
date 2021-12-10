@@ -18,9 +18,9 @@ def getReservas():
     finally:
         return response
 
-def addReserva(checkInPlanificado,checkin,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId,funcionarioId):
+def addReserva(checkInPlanificado,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId):
     try:
-        connector.callProcedureParameters('SPADDRESERVA',[checkInPlanificado,checkin,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId,funcionarioId])
+        connector.callProcedureParameters('SPADDRESERVA',[checkInPlanificado,checkout,cantDias,cantAdultos,cantNinos,cantBebes,totalReserva,estadoReserva,deptoId,clienteId])
         print('ok Insert')
         return True
     except Exception as err:
@@ -76,7 +76,8 @@ def getReservaServex(id):
         response = []
         reservaServexList = [lista for lista in connector.callProcedureIdRefCursor('spGetReservaServex',[id])]
         for reservaServex in reservaServexList:
-            response.append({'id': reservaServex[0], 'quantity': reservaServex[1], 'subTotal' : reservaServex[2], 'idServEx': reservaServex[3], 'idReserve': reservaServex[4]})
+            response.append({'id': reservaServex[0], 'quantity': reservaServex[1], 'subTotal' : reservaServex[2], 
+            'idServEx': reservaServex[3], 'idReserve': reservaServex[4], 'desc_serv': reservaServex[5]})
             print(response)
         return response
     except Exception as err:
@@ -99,4 +100,85 @@ def deleteReservaServex(id):
      return True
     except Exception as err:
         print('no se pudo eliminar el servicio extra' , err)
+
+def getReservaByUser(id):
+    try:
+        response = []
+        reservaList = [lista for lista in connector.callProcedureIdRefCursor('SPGETRESERVABYUSER', [id])]
+        for reserva in reservaList:
+            response.append({"id": reserva[0], "departmentName" : reserva[1], "communeName" : reserva[2], "departmentAddress" : reserva[3]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Error en controller' + err)
+    finally:
+        return response
+
+def getReservaById(id):
+    try:
+        response = []
+        reservaList = [lista for lista in connector.callProcedureIdRefCursor('SPGETRESERVABYID', [id])]
+        for reserva in reservaList:
+            response.append({"id": reserva[0], "totalReserve" : reserva[1], "checkIn" : reserva[2], "checkOut" : reserva[3]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Error en controller' + err)
+    finally:
+        return response
+
+def putCheckout(id):
+    try:
+        connector.callProcedureParameters('spUpdateCheckout',[id])
+        print('update ok')
+        return True
+    except Exception as err:
+        print('no se pudo actualizar el check in '+ err)
+
+def createOrderPay(id):
+    try:
+        connector.callProcedureParameters('spCreateOrderPay',[id])
+
+    except Exception as err:
+        print(err)
+
+def createOrderPay(id):
+    try:
+        connector.callProcedureParameters('spCreateOrderPay',[id])
+
+    except Exception as err:
+        print(err)
+
+def getOrderPayById(id):
+    try:
+        response = []
+        reservaList = [lista for lista in connector.callProcedureParameters('spGetOrderPayById',[id])]
+        for reserva in reservaList:
+            response.append({"id": reserva[0],"TOTAL_PAGO":reserva[1],"ESTADO":[2],"FECHA_REGISTRO":[3],"ID_RESERVA":[4]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Dont me la count it '+ str(err))
+
+def updateOrderPay(id):
+    try:
+        connector.callProcedureParameters('spUpdateOrderPay',[id])
+        print('update ok')
+        return True
+    except Exception as err:
+        print('Dont me la count it '+ str(err))
+
+def getOrderPayByUser(id):
+    try:
+        response = []
+        reservaList = [lista for lista in connector.callProcedureParameters('SPGETORDERPAYBYUSER',[id])]
+        for reserva in reservaList:
+            response.append({"id": reserva[0],"TOTAL_PAGO":reserva[1],"ESTADO":[2],"FECHA_REGISTRO":[3],"ID_RESERVA":[4]})
+            print(response)
+        return response
+    except Exception as err:
+        print('Dont me la count it '+ str(err))
+
+
+
 

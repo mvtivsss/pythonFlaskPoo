@@ -1,9 +1,13 @@
 from types import MethodType
 from flask import Flask, json, jsonify, request
+from base64 import b64encode, b64decode
 import base64
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
-from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController, reservaController
+from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController, reservaController, transportController
+import random
+from transbank.error.transbank_error import TransbankError
+from transbank.webpay.webpay_plus.transaction import Transaction
 app = Flask(__name__)
 
 @app.route('/')
@@ -48,43 +52,6 @@ def getCiudad():
     else:
         return jsonify({"cities":[]})
 
-@app.route('/api/serviciosExtra', methods=['GET'])
-def getServExtra():
-    data = request.get_json()
-    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra(data['id'])]
-    # print(servicios)
-    if servicios:
-        return jsonify({'servicios': servicios})
-    else:
-        return jsonify({"servicios":[]})
-
-@app.route('/api/serviciosExtra', methods=['POST'])
-def addServExtra():
-    try:
-        data = request.get_json()
-        servicioExtra.addServExtra(data['description'], data['price'])
-        return jsonify({'ok': True})
-    except Exception as err:
-        return jsonify({'ok': err})
-
-@app.route('/api/serviciosExtra', methods=['PUT'])
-def updateServExtra():
-    try:
-        data = request.get_json()
-        servicioExtra.updateServExtra(data['id'], data['description'], data['price'])
-        return jsonify({'ok': True})
-    except Exception as err:
-        return
-
-@app.route('/api/serviciosExtra', methods=['DELETE'])
-def deleteServExtra():
-    try:
-        data = request.get_json()
-        servicioExtra.deleteServExtra(data['id'])
-        return jsonify({'ok': True})
-    except Exception as err:
-        return jsonify({'message':'no se pudo eliminar el servicio extra'})
-
 @app.route('/api/acta')
 def getActa():
     actas = [listaActa for listaActa in actaController.getActa()]
@@ -96,6 +63,7 @@ def getActa():
 
 @app.route('/api/departments', methods=['GET'])
 def getDepartments():
+    print('test////////////////////////////')
     departamentos = [departmentList for departmentList in departmentController.getDepartments()]
     if (len(departamentos)> 0):
         return jsonify({'departments':departamentos })
@@ -105,23 +73,27 @@ def getDepartments():
 @app.route('/api/departments', methods=['POST'])
 def addDepartment():
     try:
-        # with open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg') as f:
+        print('I work?')
         data = request.get_json()
-            # encoded = base64.b64decode(f.read()).decode()
-            
-            # f = Image.open('C:\Users\matim\Desktop\TurismoPy\images\python.jpg','rb') as f:
-            # image = open(data['departmentPhoto'],'rb')
-            # image_read = image.read()
-            # image64encoded = base64.decodebytes(image_read)
-        data1 = open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg')
-        # photo = base64.b64encode(data.read())
-
-        departmentController.addDepartment(data['name'], data['address'],data['totalRooms'], data['totalParking'],data['totalBaths'],
-            data['internet'],data['tv'],data['heating'],data['furnished'],data['departmentPrice'],
-            data['departmentStatus'],data['departmentDesc'],data["idCommune"])
+        departmentController.addDepartment(data['name']
+        ,data['address']
+        ,data['totalRooms']
+        ,data['totalParking']
+        ,data['totalBaths']
+        ,data['internet']
+        ,data['tv']
+        ,data['heating']
+        ,data['furnished']
+        ,data['departmentPrice']
+        ,data['departmentStatus']
+        ,data['departmentDesc']
+        ,data['idCommune']
+        ,data['imgB64'])
+        
         return jsonify({'ok': True})
     except Exception as err:
-        return print(err)
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/departments', methods=['PUT'])
 def updateDepartment():
@@ -285,8 +257,7 @@ def getDepartmentById():
 
 @app.route('/api/departmentByDisponibility', methods=['GET'])
 def getDepartmentByDisponibility():
-    data = request.args['disponibility']
-    department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(data)]
+    department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(1)]#request.args['disponibility']
     print(department)
     if(len(department) > 0):
         return jsonify({'departments': department})
@@ -315,9 +286,9 @@ def getReserve():
 def addReserve():
     try:
         data = request.get_json()
-        reservaController.addReserva(data['checkInPlanning'],data['checkIn'], data['checkOut'],data['totalDays'],
+        reservaController.addReserva(data['checkInPlanning'],data['checkOut'],data['totalDays'],
                                      data['totalAdults'], data['totalKids'], data['totalBabies'],data['totalReserve'],
-                                     data['statusReserve'], data['departmentId'],data['clientId'], data['workerId'])
+                                     data['statusReserve'], data['departmentId'],data['clientId'])
         return jsonify({'ok': True})
     except Exception as err:
         return print(err)
@@ -363,8 +334,8 @@ def deleteMulta():
 @app.route('/api/multa', methods=['GET'])
 def getMulta():
     try:
-        data = request.get_json()
-        multa = [multaList for multaList in reservaController.getMulta(data['idReserve'])]
+        data = request.args["id"]
+        multa = [multaList for multaList in reservaController.getMulta(data)]
         print(multa)
         if(len(multa)> 0):
             return jsonify({'fines': multa})
@@ -376,8 +347,7 @@ def getMulta():
 @app.route('/api/reserveServex', methods=['GET'])
 def getReservaServex():
     try:
-        data = request.get_json()
-        reservaServex = [reservaServexList for reservaServexList in reservaController.getReservaServex(data['id'])]
+        reservaServex = [reservaServexList for reservaServexList in reservaController.getReservaServex(request.args['id'])]
         print(reservaServex)
         if(len(reservaServex)> 0):
             return jsonify({'services': reservaServex})
@@ -386,24 +356,34 @@ def getReservaServex():
     except Exception as err:
         print(err)
 
-# @app.route('/api/reserveServex', methods=['POST'])
-# def addReservaServex():
-#     try:
-#         data = request.get_json()
-#         servicioExtra.addReservaServex(data['cantidad'],data['subtotal'],data['serv_id'],data['reserv_id'])
-#         return jsonify({'ok': True})
-#     except Exception as err:
-#         return jsonify({'ok': err})
+@app.route('/api/reserveServex', methods=['POST'])
+def addReservaServex():
+    try:
+        data = request.get_json()
+        reservaController.addReservaServex(data['cantidad'],data['subtotal'],data['serv_id'],data['reserv_id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'ok': err})
 
-# @app.route('/api/reserveServex', methods=['DELETE'])
-# def deleteReservaServex():
-#     try:
-#         data = request.get_json()
-#         servicioExtra.deleteReservaServex(data['id'])
-#         return jsonify({'ok': True})
-#     except Exception as err:
-#         return jsonify({'message':'no se pudo eliminar la reserva'})
+@app.route('/api/reserveServex', methods=['DELETE'])
+def deleteReservaServex():
+    try:
+        data = request.get_json()
+        reservaController.deleteReservaServex(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'message':'no se pudo eliminar la reserva'})
 
+
+@app.route('/api/extraServices', methods=['GET'])
+def getServExtra():
+    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
+    # print(servicios)
+    if servicios:
+        return jsonify({'servicios': servicios})
+    else:
+        return jsonify({"servicios":[]})
+        
 # @app.route('/api/reserveByUser')
 # def getReservaByUser():
 #     try:
@@ -414,6 +394,134 @@ def getReservaServex():
 #         else: 
 #             return jsonify
 
+@app.route('/api/transport', methods=['GET'])
+def getTransports():
+    transport = [transports for transports in transportController.getTransports()]
+    print(transport)
+    if(len(transport) > 0):
+        return jsonify({'transports': transport})
+    else:
+        return jsonify({'transports': []})
 
+
+@app.route('/api/transport', methods=['POST'])
+def addTransports():
+    try:
+        data = request.get_json()
+        transportController.addTransport(data['place'],data['time'], 
+        data['vehicle'],data['idReserve'],data['idWorker'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'ok': err})
+
+@app.route('/api/transport', methods=['PUT'])
+def updateTransport():
+    try:
+        data = request.get_json()
+        transportController.updateTransport(data['id'],data['place']
+        ,data['time'],data['vehicle'],data['idReserve'],data['idWorker'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return
+
+@app.route('/api/transport', methods=['DELETE'])
+def deleteTransport():
+    try:
+        data = request.get_json()
+        transportController.deleteTransport(data['id'])
+        return jsonify({'ok': True})
+    except Exception as err:
+        return jsonify({'message':'no se pudo eliminar el transporte'})
+
+@app.route('/api/getReservaByUser')
+def getReservaByUser():
+    data = request.args['id']
+    reserva = [lista for lista in reservaController.getReservaByUser(data)]
+    print(reserva)
+    if(len(reserva) > 0):
+        return jsonify({"reserve" : reserva})
+    else:
+        return jsonify({"reserve" : []})
+
+@app.route('/api/getCheckout')
+def getCheckout():
+    try:
+        data = request.args["id"]
+        reserva = [reservaList for reservaList in reservaController.getReservaById(data)]
+        acta = [actalist for actalist in reservaController.getMulta(data)]
+        servex = [servexList for servexList in reservaController.getReservaServex(data)]
+        print(acta)
+
+        return jsonify({'reserve': reserva, 'fines' : acta, 'servex' : servex})
+    except Exception as err:
+        print(err)
+
+@app.route('/api/putCheckout', methods=['PUT'])
+def putCheckout():
+    try:
+        data = request.get_json()
+        reservaController.putCheckout(data["id"])
+        reservaController.createOrderPay(data["id"])
+        return jsonify({'ok': True})
+    except Exception as err:
+        print(err)
+
+@app.route('/api/pagoInfo', methods=['POST'])
+def pagoInfo():
+    try:
+
+        data = request.get_json()["token"]
+        print(data)
+        response = Transaction.commit(data)
+        print(str(response))
+        return jsonify({"response": str(response)})
+    except Exception as err:
+        print(err)
+        return str(err)
+
+@app.route('/api/pago', methods=["GET"])
+def pago():
+    try:
+     # El SDK apunta por defecto al ambiente de pruebas, no es necesario configurar lo siguiente
+        # Transaction.webpay.webpay_plus.webpay_plus_default_commerce_code = 597055555532
+        # Transaction.webpay.webpay_plus.default_api_key = "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C"
+        # Transaction.webpay.webpay_plus.default_integration_type = IntegrationType.TEST
+        # response = Transaction.webpay.webpay_plus.create("PRUEBABUY_ORDER", "123", 1000, "https://www.google.cl")
+        data = request.args['id']
+        response = reservaController.getOrderPayById(data) #Deberia ser get order pay y agregar un update
+
+        print("Webpay Plus Transaction.create")
+        buy_order = str(random.randrange(1000000, 99999999))
+        session_id = str(random.randrange(1000000, 99999999))
+        amount = random.randrange(10000, 1000000)
+        return_url = request.url_root + 'webpay-plus/commit'
+
+        create_request = {
+            "buy_order": buy_order,
+            "session_id": session_id,
+            "amount": amount,
+            "return_url": "http://localhost:4000/"
+        }
+
+        responseTrans = Transaction.create(buy_order, session_id, response[0]["totalReserve"], "http://localhost:4000/client/pago")
+        # print(responseTrans.token, responseTrans.url)
+        # response = Transaction.commit(token = responseTrans.token)
+        reservaController.updateOrderPay(data)
+        return jsonify({"url" : str(responseTrans.url), "token" : str(responseTrans.token)})
+    except Exception as err:
+        print(err)
+
+@app.route('/api/getOrderByUser', methods=["GET"])
+def getOrderByUser():
+    try:
+        response = [orders for orders in reservaController.getOrderPayByUser(request.args['id'])]
+        print(response)
+        if(len(response)> 0):
+            return jsonify({'order': response})
+        else:
+            return jsonify({'order': []})
+    except Exception as err:
+        print(err)
+        
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug = True, port = 4000)

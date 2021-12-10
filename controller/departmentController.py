@@ -1,5 +1,9 @@
 from BD import configuracion as connector
-import base64
+from base64 import b64encode, b64decode
+import random
+from  os import path, makedirs
+import pathlib
+import uuid
 
 def getDepartments():
     try:
@@ -10,7 +14,6 @@ def getDepartments():
                              'totalBaths': departments[5], 'internet':departments[6], 'tv': departments[7],'heating':departments[8], 'furnished': departments[9],
                              'departmentPrice': departments[10], 'departmentStatus': departments[11],'departmentDesc':departments[12], 'idCommune':departments[13],
                              'nameCommune': departments[14]})
-            print(response)
         return response
     except Exception as err:
         print('Error en controller ', err)
@@ -22,9 +25,13 @@ def getDepartmentById(id):
         response = []
         departmentByIdList = connector.callProcedureIdRefCursor('SPGETDEPARTMENTBYID',[id])
         for department in departmentByIdList:
+            with open(department[14], 'rb') as f:
+                imgContents = f.read()
+            b4Image = str(b64encode(imgContents))
             response.append({'id':department [0],'name': department [1], 'address':department [2],'totalRooms':department [3], 'totalParking': department [4],
                              'totalBaths': department [5], 'internet':department [6], 'tv': department [7],'heating':department [8], 'furnished': department [9],
-                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12]})
+                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description':department [13]
+                             ,'imgB64':b4Image})
             print(response)
         return response
     except Exception as err:
@@ -37,9 +44,13 @@ def getDepartmentByDisponibility(disponibility):
         response = []
         departmentByIdList = connector.callProcedureIdRefCursor('SPGETDEPARTMENTBYDISPONIBILITY',[disponibility])
         for department in departmentByIdList:
+            with open(department[14], 'rb') as f:
+                imgContents = f.read()
+            b4Image = str(b64encode(imgContents))
             response.append({'id':department [0],'name': department [1], 'address':department [2],'totalRooms':department [3], 'totalParking': department [4],
                              'totalBaths': department [5], 'internet':department [6], 'tv': department [7],'heating':department [8], 'furnished': department [9],
-                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description' : department[13]})
+                             'departmentPrice': department [10], 'departmentStatus': department [11],'ubication':department [12], 'description' : department[13]
+                             ,'imgB64':b4Image})
             print(response)
         return response
     except Exception as err:
@@ -48,19 +59,38 @@ def getDepartmentByDisponibility(disponibility):
         return response
 
 
-
+# gets base64, decode its and save its as a image in a folder by the department id
 def addDepartment(nombre, direccion,habitaciones,
                   estacionamientos, banos, internet, cable,
-                  calefaccion, amoblado, precio, estado, descripcion,comuna):
+                  calefaccion, amoblado, precio, estado, descripcion,comuna, imgB64): #
+    print('I work 2?')
     try:
-    #  foto = Image.open('C:\\Users\\matim\\Desktop\\TurismoPy\\images\\python.jpg')
+     print('I work 3?, id is: ')
+     parentPath =  str(pathlib.Path().resolve())
+     leafPath = '/resources/deptoImages'
+     imagePath = parentPath + leafPath
+
+     if (path.isdir(imagePath) == False):
+         makedirs(imagePath)
      
+     randomID = uuid.uuid4().hex
+
+     deptoPicName = 'depto'
+     
+     namePath = deptoPicName + randomID + '.png'
+
+     imgPath = imagePath + '/' + namePath
+
+     with open(imgPath, "wb") as fh:
+         fh.write(b64decode(imgB64))
      connector.callProcedureParameters('spAddDepartment', [nombre, direccion,habitaciones,estacionamientos, banos, internet, cable,
-                                                           calefaccion, amoblado, precio, estado, descripcion,comuna])
+                                                           calefaccion, amoblado, precio, estado, descripcion,comuna,imgPath])
      print('ok insert')
+     print(str(imgPath))
      return True
     except Exception as err:
         print('no se pudo agregar la Department')
+        return False
 
 def updateDepartment(id,nombre, direccion,habitaciones,
                   estacionamientos, banos, internet, cable,
