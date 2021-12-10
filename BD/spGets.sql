@@ -436,21 +436,14 @@ CREATE OR REPLACE PROCEDURE TURISMO.spGetOrderPayById(ID_AUX     TURISMO.ORDENPA
       DBMS_OUTPUT.PUT_LINE(SQLERRM());
   END;
 /
-CREATE OR REPLACE PROCEDURE TURISMO.SPGETORDERPAYBYUSER(ID_AUX     TURISMO.USUARIO.ID_USU % TYPE,
-                                                        CUR    OUT SYS_REFCURSOR)
+CREATE OR REPLACE PROCEDURE TURISMO.spGetOrderPayById(ID_AUX     TURISMO.ORDENPAGO.ID % TYPE,
+                                               CUR    OUT SYS_REFCURSOR)
   AS
   BEGIN
-    OPEN CUR FOR
-    SELECT "o".ID,
-           "o".TOTAL_PAGO,
-           "o".ESTADO,
-           TO_CHAR("o".FECHA_REGISTRO, 'DD/MM/YYYY'),
-           "o".ID_RESERVA
-      FROM ORDENPAGO "o"
-        JOIN RESERVA "r"
-          ON "o".ID_RESERVA = "r".ID_RESERVA
-        JOIN USUARIO "u"
-          ON "r".ID_CLIENTE = "u".ID_USU
-      WHERE "u".ID_USU = ID_AUX;
+  OPEN CUR FOR
+    SELECT "o".ID, "o".TOTAL_PAGO, "o".ESTADO, "o".FECHA_REGISTRO, "o".ID_RESERVA
+      FROM ORDENPAGO "o" WHERE "o".ID = ID_AUX;
+      EXCEPTION WHEN OTHERS THEN 
+      DBMS_OUTPUT.PUT_LINE(SQLERRM());
   END;
 /

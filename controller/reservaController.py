@@ -163,9 +163,10 @@ def updateOrderPay(id):
 def getOrderPayByUser(id):
     try:
         response = []
-        reservaList = [lista for lista in connector.callProcedureParameters('SPGETORDERPAYBYUSER',[id])]
+        reservaList = [lista for lista in connector.callProcedureIdRefCursor('SPGETORDERPAYBYUSER',[id])]
+        print(reservaList)
         for reserva in reservaList:
-            response.append({"id": reserva[0],"TOTAL_PAGO":reserva[1],"ESTADO":[2],"FECHA_REGISTRO":[3],"ID_RESERVA":[4]})
+            response.append({"id": reserva[0],"TOTAL_PAGO":reserva[1],"ESTADO":reserva[2],"FECHA_REGISTRO":reserva[3],"ID_RESERVA":reserva[4]})
             print(response)
         return response
     except Exception as err:
