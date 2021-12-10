@@ -16,13 +16,17 @@ def inicio():
 
 @app.route('/api/regions', methods=['GET'])
 def getRegions():
-    regiones = [regionList for regionList in region.getRegiones()]
-    # listRegiones = json.dumps(regiones)
-    print(regiones)
-    if (len(regiones) > 0):
-        return jsonify({"regions":regiones})
-    else:
-        return jsonify({"regions": []})
+    try:
+        regiones = [regionList for regionList in region.getRegiones()]
+        # listRegiones = json.dumps(regiones)
+        print(regiones)
+        if (len(regiones) > 0):
+            return jsonify({"regions":regiones})
+        else:
+            return jsonify({"regions": []})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/regions', methods=['POST'])
 def addRegion():
@@ -32,16 +36,21 @@ def addRegion():
         region.addRegion(data['id'], data['nombre'])
         return jsonify({'ok': True})
     except Exception as err:
-        return 
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/communes')
 def getComuna():
-    comuna = [comunaList for comunaList in comunaController.getComuna()]
-    print(comuna)
-    if (len(comuna) > 0):
-        return jsonify({"communes":comuna})
-    else:
-        return jsonify({"communes":[]})
+    try:
+        comuna = [comunaList for comunaList in comunaController.getComuna()]
+        print(comuna)
+        if (len(comuna) > 0):
+            return jsonify({"communes":comuna})
+        else:
+            return jsonify({"communes":[]})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/cities')
 def getCiudad():
@@ -54,21 +63,29 @@ def getCiudad():
 
 @app.route('/api/acta')
 def getActa():
-    actas = [listaActa for listaActa in actaController.getActa()]
-    print(actas)
-    if (len(actas) > 0 ):
-        return jsonify({'actas': actas})
-    else:
-        return jsonify({"message":'no existen actas'})
+    try:
+        actas = [listaActa for listaActa in actaController.getActa()]
+        print(actas)
+        if (len(actas) > 0 ):
+            return jsonify({'actas': actas})
+        else:
+            return jsonify({"message":'no existen actas'})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/departments', methods=['GET'])
 def getDepartments():
-    print('test////////////////////////////')
-    departamentos = [departmentList for departmentList in departmentController.getDepartments()]
-    if (len(departamentos)> 0):
-        return jsonify({'departments':departamentos })
-    else:
-        return jsonify({'departments':[] })
+    try:
+        print('test////////////////////////////')
+        departamentos = [departmentList for departmentList in departmentController.getDepartments()]
+        if (len(departamentos)> 0):
+            return jsonify({'departments':departamentos })
+        else:
+            return jsonify({'departments':[] })
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/departments', methods=['POST'])
 def addDepartment():
@@ -117,19 +134,27 @@ def deleteDepartment():
 
 @app.route('/api/inventories', methods=['GET'])
 def getInventory():
-    inventario = [inventarioList for inventarioList in inventarioController.getInventories()]
-    if (len(inventario)> 0):
-        return jsonify({'inventories':inventario })
-    else:
-        return jsonify({'inventories':[] })
+    try:
+        inventario = [inventarioList for inventarioList in inventarioController.getInventories()]
+        if (len(inventario)> 0):
+            return jsonify({'inventories':inventario })
+        else:
+            return jsonify({'inventories':[] })
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/inventoriesDepartment', methods=['GET'])
 def getInventoryDepartments():
-    inventario = [inventarioList for inventarioList in inventarioDepartamentoController.getInventoryDepartment()]
-    if (len(inventario)> 0):
-        return jsonify({'inventoriesDepartments':inventario })
-    else:
-        return jsonify({'inventoriesDepartments':[] })
+    try:
+        inventario = [inventarioList for inventarioList in inventarioDepartamentoController.getInventoryDepartment()]
+        if (len(inventario)> 0):
+            return jsonify({'inventoriesDepartments':inventario })
+        else:
+            return jsonify({'inventoriesDepartments':[] })
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/inventoriesDepartment', methods=['POST'])
 def addInventoryDepartment():
@@ -142,12 +167,16 @@ def addInventoryDepartment():
 
 @app.route('/api/inventoriesDepartmentById', methods=['GET'])
 def getInventoryDepartmentsById():
-    data = request.args['id']
-    inventario = [inventarioList for inventarioList in inventarioDepartamentoController.getInventoryDepartmentById(data)]
-    if (len(inventario)> 0):
-        return jsonify({'inventoriesDepartments':inventario })
-    else:
-        return jsonify({'inventoriesDepartments':[] })
+    try:
+        data = request.args['id']
+        inventario = [inventarioList for inventarioList in inventarioDepartamentoController.getInventoryDepartmentById(data)]
+        if (len(inventario)> 0):
+            return jsonify({'inventoriesDepartments':inventario })
+        else:
+            return jsonify({'inventoriesDepartments':[] })
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/inventoriesDepartment', methods=['DELETE'])
 def deleteInventoryDepartment():
@@ -160,11 +189,15 @@ def deleteInventoryDepartment():
 
 @app.route('/api/users', methods=['GET'])
 def getUsers():
-    user = [userList for userList in usuarioController.getUsuarios()]
-    if (len(user)> 0):
-        return jsonify({'users':user })
-    else:
-        return jsonify({'users':[] })
+    try:
+        user = [userList for userList in usuarioController.getUsuarios()]
+        if (len(user)> 0):
+            return jsonify({'users':user })
+        else:
+            return jsonify({'users':[] })
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/users', methods=['POST'])
 def userInit():
@@ -207,30 +240,42 @@ def addMaintainDepartment():
 
 @app.route('/api/maintainsDepartments',methods=['GET'])
 def getMaintainsDepartments():
-    maintains = [maintainsList for maintainsList in maintainsDepartmentController.getMaintainsDepartments()]
-    if (len(maintains)> 0):
-        return jsonify({'maintainsDepartments':maintains })
-    else:
-        return jsonify({'maintainsDepartments':[] })
+    try:
+        maintains = [maintainsList for maintainsList in maintainsDepartmentController.getMaintainsDepartments()]
+        if (len(maintains)> 0):
+            return jsonify({'maintainsDepartments':maintains })
+        else:
+            return jsonify({'maintainsDepartments':[] })
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/maintainsDepartmentsById',methods=['GET'])
 def getMaintainsDepartmentsById():
-    data = request.args['id']
-    print(data)
-    maintains = [maintainsList for maintainsList in maintainsDepartmentController.getMaintainDepartmentById(data)]
-    # print(data)
-    if (len(maintains)> 0):
-        return jsonify({'maintainsDepartments':maintains })
-    else:
-        return jsonify({'maintainsDepartments':[] })
+    try:
+        data = request.args['id']
+        print(data)
+        maintains = [maintainsList for maintainsList in maintainsDepartmentController.getMaintainDepartmentById(data)]
+        # print(data)
+        if (len(maintains)> 0):
+            return jsonify({'maintainsDepartments':maintains })
+        else:
+            return jsonify({'maintainsDepartments':[] })
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/typeUser', methods=['GET'])
 def getTypeUser():
-    typeUser = [typeUserList for typeUserList in typeUserController.getTypeUser()]
-    if(len(typeUser) > 0):
-        return jsonify({'typeUsers': typeUser})
-    else:
-        return jsonify({'typeUsers': []})
+    try:
+        typeUser = [typeUserList for typeUserList in typeUserController.getTypeUser()]
+        if(len(typeUser) > 0):
+            return jsonify({'typeUsers': typeUser})
+        else:
+            return jsonify({'typeUsers': []})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/validateLogin', methods=['POST'])
 def validateLogin():
@@ -247,22 +292,30 @@ def validateLogin():
 
 @app.route('/api/departmentById', methods=['GET'])
 def getDepartmentById():
-    data = request.args['id']
-    department = [departmentList for departmentList in departmentController.getDepartmentById(data)]
-    print(department)
-    if (len(department) > 0):
-        return jsonify({'department': department})
-    else:
-        return jsonify({'department': []})
+    try:
+        data = request.args['id']
+        department = [departmentList for departmentList in departmentController.getDepartmentById(data)]
+        print(department)
+        if (len(department) > 0):
+            return jsonify({'department': department})
+        else:
+            return jsonify({'department': []})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/departmentByDisponibility', methods=['GET'])
 def getDepartmentByDisponibility():
-    department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(1)]#request.args['disponibility']
-    print(department)
-    if(len(department) > 0):
-        return jsonify({'departments': department})
-    else:
-        return jsonify({'department': []})
+    try:
+        department = [departmentList for departmentList in departmentController.getDepartmentByDisponibility(1)]#request.args['disponibility']
+        print(department)
+        if(len(department) > 0):
+            return jsonify({'departments': department})
+        else:
+            return jsonify({'department': []})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/updateDisponibility', methods=['PUT'])
 def updateDisponibility():
@@ -275,12 +328,16 @@ def updateDisponibility():
     
 @app.route('/api/reserve', methods=['GET'])
 def getReserve():
-    reserva = [reservaList for reservaList in reservaController.getReservas()]
-    print(reserva)
-    if(len(reserva) > 0):
-        return jsonify({'reserves': reserva})
-    else:
-        return jsonify({'reserves': []})
+    try:
+        reserva = [reservaList for reservaList in reservaController.getReservas()]
+        print(reserva)
+        if(len(reserva) > 0):
+            return jsonify({'reserves': reserva})
+        else:
+            return jsonify({'reserves': []})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
 
 @app.route('/api/reserve', methods=['POST'])
 def addReserve():
@@ -377,31 +434,31 @@ def deleteReservaServex():
 
 @app.route('/api/extraServices', methods=['GET'])
 def getServExtra():
-    servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
-    # print(servicios)
-    if servicios:
-        return jsonify({'servicios': servicios})
-    else:
-        return jsonify({"servicios":[]})
-        
-# @app.route('/api/reserveByUser')
-# def getReservaByUser():
-#     try:
-#         data = request.args['id']
-#         reserveByUser = [lista for lista in reservaController.getReservaByUser(data)]
-#         if len(reserveByUser) > 0:
-#             return jsonify({'reserve': reserveByUser})
-#         else: 
-#             return jsonify
+    try:
+        servicios = [serviciosList for serviciosList in servicioExtra.getServExtra()]
+        # print(servicios)
+        if servicios:
+            return jsonify({'servicios': servicios})
+        else:
+            return jsonify({"servicios":[]})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
+
 
 @app.route('/api/transport', methods=['GET'])
 def getTransports():
-    transport = [transports for transports in transportController.getTransports()]
-    print(transport)
-    if(len(transport) > 0):
-        return jsonify({'transports': transport})
-    else:
-        return jsonify({'transports': []})
+    try:
+        transport = [transports for transports in transportController.getTransports()]
+        print(transport)
+        if(len(transport) > 0):
+            return jsonify({'transports': transport})
+        else:
+            return jsonify({'transports': []})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
+
 
 
 @app.route('/api/transport', methods=['POST'])
@@ -435,13 +492,18 @@ def deleteTransport():
 
 @app.route('/api/getReservaByUser')
 def getReservaByUser():
-    data = request.args['id']
-    reserva = [lista for lista in reservaController.getReservaByUser(data)]
-    print(reserva)
-    if(len(reserva) > 0):
-        return jsonify({"reserve" : reserva})
-    else:
-        return jsonify({"reserve" : []})
+    try:
+        data = request.args['id']
+        reserva = [lista for lista in reservaController.getReservaByUser(data)]
+        print(reserva)
+        if(len(reserva) > 0):
+            return jsonify({"reserve" : reserva})
+        else:
+            return jsonify({"reserve" : []})
+    except Exception as err:
+        print(err)
+        return jsonify({'ok': False})
+
 
 @app.route('/api/getCheckout')
 def getCheckout():
