@@ -10,13 +10,10 @@ def getDepartments():
         response = []
         departmentsList = [lista for lista in connector.callProcedure('spGetDepartments')]
         for departments in departmentsList:
-            with open(departments[15], 'rb') as f:
-                imgContents = f.read()
-            b4Image = str(b64encode(imgContents))
             response.append({'id':departments[0],'name': departments[1], 'address':departments[2],'totalRooms':departments[3], 'totalParking': departments[4],
                              'totalBaths': departments[5], 'internet':departments[6], 'tv': departments[7],'heating':departments[8], 'furnished': departments[9],
                              'departmentPrice': departments[10], 'departmentStatus': departments[11],'departmentDesc':departments[12], 'idCommune':departments[13],
-                             'nameCommune': departments[14], 'imgB64':b4Image})
+                             'nameCommune': departments[14]})
         return response
     except Exception as err:
         print('Error en controller ', err)
