@@ -138,14 +138,6 @@ def putCheckout(id):
 def createOrderPay(id):
     try:
         connector.callProcedureParameters('spCreateOrderPay',[id])
-
-    except Exception as err:
-        print(err)
-
-def createOrderPay(id):
-    try:
-        connector.callProcedureParameters('spCreateOrderPay',[id])
-
     except Exception as err:
         print(err)
 
