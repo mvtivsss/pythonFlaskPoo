@@ -127,9 +127,9 @@ def getReservaById(id):
     finally:
         return response
 
-def putCheckout(id):
+def putCheckout(id,total):
     try:
-        connector.callProcedureParameters('spUpdateCheckout',[id])
+        connector.callProcedureParameters('spUpdateCheckout',[id,total])
         print('update ok')
         return True
     except Exception as err:

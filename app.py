@@ -490,7 +490,7 @@ def deleteTransport():
     except Exception as err:
         return jsonify({'message':'no se pudo eliminar el transporte'})
 
-@app.route('/api/getReservaByUser')
+@app.route('/api/getReservaByUser',  methods=['GET'])
 def getReservaByUser():
     try:
         data = request.args['id']
@@ -505,7 +505,7 @@ def getReservaByUser():
         return jsonify({'ok': False})
 
 
-@app.route('/api/getCheckout')
+@app.route('/api/getCheckout',  methods=['GET'])
 def getCheckout():
     try:
         data = request.args["id"]
@@ -522,8 +522,7 @@ def getCheckout():
 def putCheckout():
     try:
         data = request.get_json()
-        reservaController.putCheckout(data["id"])
-        reservaController.createOrderPay(data["id"])
+        reservaController.putCheckout(data["id"],data["total"])
         return jsonify({'ok': True})
     except Exception as err:
         print(err)
