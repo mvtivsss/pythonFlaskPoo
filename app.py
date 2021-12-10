@@ -5,6 +5,9 @@ import base64
 from controller import regionController as region, servicioExtraController as servicioExtra
 from controller import actaController, departmentController, clientsController, comunaController, ciudadController, inventarioController, inventarioDepartamentoController
 from controller import usuarioController, maintainsDepartmentController, typeUserController, loginController, reservaController, transportController
+import random
+from transbank.error.transbank_error import TransbankError
+from transbank.webpay.webpay_plus.transaction import Transaction
 app = Flask(__name__)
 
 @app.route('/')
@@ -452,6 +455,62 @@ def getCheckout():
         return jsonify({'reserve': reserva, 'fines' : acta, 'servex' : servex})
     except Exception as err:
         print(err)
+
+@app.route('/api/putCheckout', methods=['PUT'])
+def putCheckout():
+    try:
+        data = request.get_json()
+        reservaController.putCheckout(data["id"])
+        reservaController.createOrderPay(data["id"])
+        return jsonify({'ok': True})
+    except Exception as err:
+        print(err)
+
+@app.route('/api/pagoInfo', methods=['POST'])
+def pagoInfo():
+    try:
+
+        data = request.get_json()["token"]
+        print(data)
+        response = Transaction.commit(data)
+        print(str(response))
+        return jsonify({"response": str(response)})
+    except Exception as err:
+        print(err)
+        return str(err)
+
+@app.route('/api/pago', methods=["GET"])
+def pago():
+    try:
+     # El SDK apunta por defecto al ambiente de pruebas, no es necesario configurar lo siguiente
+        # Transaction.webpay.webpay_plus.webpay_plus_default_commerce_code = 597055555532
+        # Transaction.webpay.webpay_plus.default_api_key = "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C"
+        # Transaction.webpay.webpay_plus.default_integration_type = IntegrationType.TEST
+        # response = Transaction.webpay.webpay_plus.create("PRUEBABUY_ORDER", "123", 1000, "https://www.google.cl)
+        data = request.get_json()
+        response = reservaController.getReservaById(data["id"])
+
+        print("Webpay Plus Transaction.create")
+        buy_order = str(random.randrange(1000000, 99999999))
+        session_id = str(random.randrange(1000000, 99999999))
+        amount = random.randrange(10000, 1000000)
+        return_url = request.url_root + 'webpay-plus/commit'
+
+        create_request = {
+            "buy_order": buy_order,
+            "session_id": session_id,
+            "amount": amount,
+            "return_url": "http://localhost:4000/"
+        }
+
+        responseTrans = Transaction.create(buy_order, session_id, response[0]["totalReserve"], "http://localhost:4000/client/pago)
+        # print(responseTrans.token, responseTrans.url)
+        # response = Transaction.commit(token = responseTrans.token)
+
+        return jsonify({"url" : str(responseTrans.url), "token" : str(responseTrans.token)})
+    except Exception as err:
+        print(err)
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug = True, port = 4000)

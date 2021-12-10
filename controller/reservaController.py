@@ -126,3 +126,25 @@ def getReservaById(id):
         print('Error en controller' + err)
     finally:
         return response
+
+def putCheckout(id):
+    try:
+        connector.callProcedureParameters('spUpdateCheckout',[id])
+        print('update ok')
+        return True
+    except Exception as err:
+        print('no se pudo actualizar el check in '+ err)
+
+def createOrderPay(id):
+    try:
+        connector.callProcedureParameters('spCreateOrderPay',[id])
+
+    except Exception as err:
+        print(err)
+
+def createOrderPay(id):
+    try:
+        connector.callProcedureParameters('spCreateOrderPay',[id])
+
+    except Exception as err:
+        print(err)
