@@ -486,9 +486,9 @@ def pago():
         # Transaction.webpay.webpay_plus.webpay_plus_default_commerce_code = 597055555532
         # Transaction.webpay.webpay_plus.default_api_key = "579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A36B1C"
         # Transaction.webpay.webpay_plus.default_integration_type = IntegrationType.TEST
-        # response = Transaction.webpay.webpay_plus.create("PRUEBABUY_ORDER", "123", 1000, "https://www.google.cl)
-        data = request.get_json()
-        response = reservaController.getReservaById(data["id"])
+        # response = Transaction.webpay.webpay_plus.create("PRUEBABUY_ORDER", "123", 1000, "https://www.google.cl")
+        data = request.args['id']
+        response = reservaController.getOrderPayById(data) #Deberia ser get order pay y agregar un update
 
         print("Webpay Plus Transaction.create")
         buy_order = str(random.randrange(1000000, 99999999))
@@ -503,10 +503,10 @@ def pago():
             "return_url": "http://localhost:4000/"
         }
 
-        responseTrans = Transaction.create(buy_order, session_id, response[0]["totalReserve"], "http://localhost:4000/client/pago)
+        responseTrans = Transaction.create(buy_order, session_id, response[0]["totalReserve"], "http://localhost:4000/client/pago")
         # print(responseTrans.token, responseTrans.url)
         # response = Transaction.commit(token = responseTrans.token)
-
+        reservaController.updateOrderPay(data)
         return jsonify({"url" : str(responseTrans.url), "token" : str(responseTrans.token)})
     except Exception as err:
         print(err)
