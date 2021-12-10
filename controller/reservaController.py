@@ -161,9 +161,21 @@ def getOrderPayById(id):
         print('Dont me la count it '+ str(err))
 
 def updateOrderPay(id):
-    connector.callProcedureParameters('spUpdateOrderPay',[id])
+    try:
+        connector.callProcedureParameters('spUpdateOrderPay',[id])
         print('update ok')
         return True
+    except Exception as err:
+        print('Dont me la count it '+ str(err))
+
+def getOrderPayByUser(id):
+    try:
+        response = []
+        reservaList = [lista for lista in connector.callProcedureParameters('SPGETORDERPAYBYUSER',[id])]
+        for reserva in reservaList:
+            response.append({"id": reserva[0],"TOTAL_PAGO":reserva[1],"ESTADO":[2],"FECHA_REGISTRO":[3],"ID_RESERVA":[4]})
+            print(response)
+        return response
     except Exception as err:
         print('Dont me la count it '+ str(err))
 

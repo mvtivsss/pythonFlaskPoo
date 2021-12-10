@@ -511,6 +511,17 @@ def pago():
     except Exception as err:
         print(err)
 
-
+@app.route('/api/getOrderByUser', methods=["GET"])
+def getOrderByUser():
+    try:
+        response = [orders for orders in reservaController.getOrderPayByUser(request.args['id'])]
+        print(response)
+        if(len(response)> 0):
+            return jsonify({'order': response})
+        else:
+            return jsonify({'order': []})
+    except Exception as err:
+        print(err)
+        
 if __name__ == '__main__':
     app.run(host="0.0.0.0",debug = True, port = 4000)
